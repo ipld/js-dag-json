@@ -15,7 +15,7 @@ const obj = {
   }
 }
 
-let block = dj.mkblock(obj)
+let block = await dj.mkblock(obj)
 block.cid // instance of CID
 block.data // Buffer, node contents
 
@@ -49,22 +49,24 @@ IPFS.
 
 However, the recommended API is only 2 methods: `from` and `mkblock`.
 
-### `dj.from`
-
-Takes a Block, Buffer, or string encoded `dag-json` node and return the
-decoded node. Note that all links will be `CID` instances.
-
-```javascript
-
-```
-
-### `dj.mkblock`
+### `dj.mkblock(Object[, algorithm='sha2-256']`
 
 Async function that takes a JavaScript object and returns a Block instance.
 Note than all CID instances will be encoded as links.
 
 ```javascript
+let block = await dj.mkblock({foo: 'bar'})
+```
 
+### `dj.from(Block||Buffer||string)`
+
+Takes a Block, Buffer, or string encoded `dag-json` node and return the
+decoded node. Note that all links will be `CID` instances.
+
+```javascript
+let block = await dj.mkblock({foo: 'bar'})
+let obj = dj.from(block)
+obj.foo // 'bar'
 ```
 
 ## IPLD/IPFS Standard Interface
@@ -85,12 +87,12 @@ The full implementation is at `dj.interface`. It includes:
 
 ## Additional APIs
 
-### `dj.parse`
+### `dj.parse(Buffer||string)`
 
 Takes a Buffer, or string encoded `dag-json` node and return the
 decoded node. Note that all links will be `CID` instances.
 
-### `dj.stringify`
+### `dj.stringify(Object)`
 
 Async function that takes a JavaScript object and returns a string. Note
 than all CID instances will be encoded as links.
