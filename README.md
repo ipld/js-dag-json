@@ -1,5 +1,7 @@
 ## JSON Directed Acrylic Graph for IPLD
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mikeal/dag-json.svg)](https://greenkeeper.io/)
+
 Usage:
 
 ```javascript
