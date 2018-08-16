@@ -8,7 +8,7 @@ const multihashes = promisify(require('multihashing-async'))
 
 /* Replace CID instances with encoded objects */
 const encode = obj => {
-  return transform(obj, (result, key, value) => {
+  return transform(obj, (result, value, key) => {
     if (CID.isCID(value)) {
       result[key] = {'/': value.toBaseEncodedString()}
     } else if (typeof value === 'object' && value !== null) {
@@ -21,12 +21,12 @@ const encode = obj => {
 
 /* Replace encoded objects with CID instances */
 const decode = obj => {
-  return transform(obj, (result, key, value) => {
+  return transform(obj, (result, value, key) => {
     if (typeof value === 'object' && value !== null) {
-      if (value['/'] && Object.keys(value) === 1) {
+      if (value['/'] && Object.keys(value).length === 1) {
         result[key] = new CID(value['/'])
       } else {
-        result[key] = decode(obj)
+        result[key] = decode(value)
       }
     } else {
       result[key] = value
@@ -102,7 +102,7 @@ const resolve = (binaryBlob, path, cb) => {
 
 const tree = (binaryBlob, options, callback) => {
   let paths = []
-  let walk = (obj, _path=[]) => {
+  let walk = (obj, _path = []) => {
     for (let [key, value] of Object.entries(obj)) {
       if (CID.isCID(value)) {
         paths.push(_path.concat([key]).join('/'))
@@ -120,14 +120,14 @@ const tree = (binaryBlob, options, callback) => {
 
 const resolver = {resolve, tree}
 
-const interface = {
+const _interface = {
   util,
   resolver,
   defaultHashAlg: 'sha2-256',
   multicodec: 'dag-json'
 }
 
-const mkblock = async (obj, algo=interface.defaultHashAlg) => {
+const mkblock = async (obj, algo = _interface.defaultHashAlg) => {
   let str = stringify(obj)
   let buff = Buffer.from(str)
   let multihash = await multihashes(buff, algo)
@@ -141,4 +141,4 @@ const from = input => {
   return parse(input)
 }
 
-module.exports = {parse, stringify, interface, mkblock, from}
+module.exports = {parse, stringify, mkblock, from, interface: _interface}
