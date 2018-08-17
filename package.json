@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "tap tests/test-*.js"
+    "pretest": "eslint *.js test/*.js",
+    "test": "tap test/test-*.js --100"
   },
   "keywords": [],
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com> (http://www.mikealrogers.com)",

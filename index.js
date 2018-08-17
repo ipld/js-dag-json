@@ -4,7 +4,7 @@ const isCircular = require('is-circular')
 const transform = require('lodash.transform')
 const Block = require('ipfs-block')
 const promisify = require('util').promisify
-const multihashes = promisify(require('multihashing-async'))
+const multihashes = require('multihashing-async')
 
 /* Replace CID instances with encoded objects */
 const encode = obj => {
@@ -71,13 +71,16 @@ const deserialize = (binaryBlob, cb) => {
   setImmediate(() => cb(null, decoded))
 }
 
+/* temporarily disabled while we wait on a registered codec
+  https://github.com/multiformats/multicodec/issues/80
+*/
+/* istanbul ignore next */
 const cid = (binaryBlob, options, cb) => {
   if (!cb) {
     cb = options
-    options = {version: 1, hashAlg: 'sha2-256'}
+    options = {version: 1, hashAlg: _interface.defaultHashAlg}
   }
-
-  multihashes(binaryBlob, options, (err, multihash) => {
+  multihashes(binaryBlob, options.hashAlg, (err, multihash) => {
     if (err) return cb(err)
     cb(null, new CID(options.version, 'dag-json', multihash))
   })
@@ -88,19 +91,26 @@ const util = {serialize, deserialize, cid}
 const resolve = (binaryBlob, path, cb) => {
   path = path.split('/').filter(x => x)
   let obj = parse(binaryBlob)
+  let ret = (err, res) => setImmediate(() => cb(err, res))
   while (path.length) {
     let key = path.shift()
     if (typeof obj[key] === 'undefined') {
-      return setImmediate(() => cb(new Error(`Key not found "${key}"`)))
+      return ret(new Error(`Key not found "${key}"`))
     }
     if (CID.isCID(obj[key])) {
-      return {value: obj[key], remainderPath: path.join('/')}
+      let value = {'/': obj[key].toBaseEncodedString()}
+      return ret(null, {value, remainderPath: path.join('/')})
     }
     obj = obj[key]
   }
+  ret(null, {value: obj, remainderPath: path.join('/')})
 }
 
-const tree = (binaryBlob, options, callback) => {
+const tree = (binaryBlob, options, cb) => {
+  if (!cb) {
+    cb = options
+    options = {}
+  }
   let paths = []
   let walk = (obj, _path = []) => {
     for (let [key, value] of Object.entries(obj)) {
@@ -109,13 +119,13 @@ const tree = (binaryBlob, options, callback) => {
       } else if (typeof value === 'object' && value !== null) {
         walk(value, _path.concat([key]))
       } else {
-        paths.push(_path.concat([key]))
+        paths.push(_path.concat([key]).join('/'))
       }
     }
   }
   let obj = parse(binaryBlob)
   walk(obj)
-  return paths.map(p => '/' + p)
+  return setImmediate(() => cb(null, paths.map(p => '/' + p)))
 }
 
 const resolver = {resolve, tree}
@@ -127,10 +137,12 @@ const _interface = {
   multicodec: 'dag-json'
 }
 
+const phash = promisify(multihashes)
+
 const mkblock = async (obj, algo = _interface.defaultHashAlg) => {
   let str = stringify(obj)
   let buff = Buffer.from(str)
-  let multihash = await multihashes(buff, algo)
+  let multihash = await phash(buff, algo)
   let cid = new CID(1, 'dag-json', multihash)
   return new Block(buff, cid)
 }

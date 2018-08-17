@@ -16,6 +16,16 @@ test('parse', async t => {
   t.same(parsed, {test: 1})
 })
 
+test('parse buffer and string', async t => {
+  let bl = await dj.mkblock({test: 1})
+  let parsed = dj.from(bl)
+  t.same(parsed, {test: 1})
+  parsed = dj.from(bl.data)
+  t.same(parsed, {test: 1})
+  parsed = dj.from(bl.data.toString())
+  t.same(parsed, {test: 1})
+})
+
 test('links', async t => {
   let bl = await dj.mkblock(
     {link: new CID(stringLink)}
