@@ -106,11 +106,7 @@ const resolve = (binaryBlob, path, cb) => {
   ret(null, {value: obj, remainderPath: path.join('/')})
 }
 
-const tree = (binaryBlob, options, cb) => {
-  if (!cb) {
-    cb = options
-    options = {}
-  }
+const tree = (binaryBlob, cb) => {
   let paths = []
   let walk = (obj, _path = []) => {
     for (let [key, value] of Object.entries(obj)) {

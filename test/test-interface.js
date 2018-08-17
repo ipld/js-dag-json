@@ -93,29 +93,3 @@ test('tree', t => {
     })
   })
 })
-
-test('tree w/ options', t => {
-  t.plan(1)
-  let obj = {
-    link: new CID(stringLink),
-    test: 1,
-    o: {test: 1, link: new CID(stringLink)},
-    arr: [1, new CID(stringLink), 3]
-  }
-  dj.interface.util.serialize(obj, (err, encoded) => {
-    if (err) throw err
-    dj.interface.resolver.tree(encoded, {}, (err, result) => {
-      if (err) throw err
-      let expected = [
-        '/arr/0',
-        '/arr/1',
-        '/arr/2',
-        '/link',
-        '/o/link',
-        '/o/test',
-        '/test'
-      ]
-      t.same(result, expected)
-    })
-  })
-})
