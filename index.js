@@ -1,152 +1,137 @@
-const json = require('fast-json-stable-stringify')
+const stringify = require('fast-json-stable-stringify')
 const CID = require('cids')
-const isCircular = require('is-circular')
-const transform = require('lodash.transform')
 const Block = require('ipfs-block')
 const promisify = require('util').promisify
 const multihashes = require('multihashing-async')
 
-/* Replace CID instances with encoded objects */
-const encode = obj => {
-  return transform(obj, (result, value, key) => {
-    if (CID.isCID(value)) {
-      result[key] = {'/': value.toBaseEncodedString()}
-    } else if (typeof value === 'object' && value !== null) {
-      result[key] = encode(value)
-    } else {
-      result[key] = value
-    }
-  })
+const uint = i => {
+  let buff = Buffer.allocUnsafe(4)
+  buff.writeUInt32BE(i)
+  return buff
 }
 
-/* Replace encoded objects with CID instances */
-const decode = obj => {
-  return transform(obj, (result, value, key) => {
-    if (typeof value === 'object' && value !== null) {
-      if (value['/'] && Object.keys(value).length === 1) {
-        result[key] = new CID(value['/'])
+class Encoder {
+  constructor (value) {
+    let buffers = []
+    let offset = 0
+    const traverse = obj => {
+      /* Note: this breaks (max-recursion-depth) on
+         circular references. Guarding against this
+         is a large perf penalty and we'd still just error
+      */
+      let overlay
+      let body
+      if (Array.isArray(obj)) {
+        overlay = []
+        body = []
       } else {
-        result[key] = decode(value)
+        overlay = {}
+        body = {}
       }
-    } else {
-      result[key] = value
+      for (let [key, value] of Object.entries(obj)) {
+        if (value && typeof value === 'object') {
+          if (CID.isCID(value)) overlay[key] = value.toBaseEncodedString()
+          // TODO: handle all binary types.
+          if (Buffer.isBuffer(value)) {
+            overlay[key] = [offset, offset + value.length]
+            offset += value.length
+            buffers.push(value)
+          } else {
+            let ret = traverse(value)
+            overlay[key] = ret.overlay
+            body[key] = ret.body
+          }
+        } else {
+          body[key] = value
+        }
+      }
+      return { overlay, body }
     }
-  })
-}
-
-/* Parse a buffer or string into a decoded dag node */
-const parse = input => {
-  if (Buffer.isBuffer(input)) {
-    input = input.toString()
+    let { overlay, body } = traverse(value)
+    this.overlay = overlay
+    this.body = body
+    this._overlay = Buffer.from(JSON.stringify(overlay))
+    this._body = Buffer.from(JSON.stringify(body))
+    this._page = [
+      uint(this._overlay.length), uint(this._body.length),
+      this._overlay, this._body, ...buffers
+    ]
+    this.data = Buffer.concat(this._page)
   }
-  input = JSON.parse(input)
-  return decode(input)
 }
 
-/* Encode an object into a string encoded dag node */
-const stringify = obj => {
-  if (isCircular(obj)) {
-    throw new Error('Object contains circular references.')
+class Decoder {
+  /* The idea here is that someone could write a reader that
+   * reads data iteratively, so each property is async
+   * and all an iterative data-source needs to implement is a
+   * new read method.
+   */
+  constructor (buffer) {
+    this.__buffer = buffer
   }
-  return json(encode(obj))
-}
-
-const serialize = (node, cb) => {
-  let encoded
-  try {
-    encoded = Buffer.from(stringify(node))
-  } catch (e) {
-    return setImmediate(() => cb(e))
+  async read (start, end) {
+    return this.__buffer.slice(start, end)
   }
-  setImmediate(() => cb(null, encoded))
-}
-
-const deserialize = (binaryBlob, cb) => {
-  let decoded
-  try {
-    decoded = parse(binaryBlob)
-  } catch (e) {
-    return setImmediate(() => cb(e))
+  get header () {
+    return [ this.__buffer.readUInt32BE(0), this.__buffer.readUInt32BE(4) ]
   }
-  setImmediate(() => cb(null, decoded))
-}
-
-/* temporarily disabled while we wait on a registered codec
-  https://github.com/multiformats/multicodec/issues/80
-*/
-/* istanbul ignore next */
-const cid = (binaryBlob, options, cb) => {
-  if (!cb) {
-    cb = options
-    options = {version: 1, hashAlg: _interface.defaultHashAlg}
+  async overlay () {
+    let [ overlayLength ] = this.header
+    let buffer = await this.read(8, 8 + overlayLength)
+    return JSON.parse(buffer.toString())
   }
-  multihashes(binaryBlob, options.hashAlg, (err, multihash) => {
-    if (err) return cb(err)
-    cb(null, new CID(options.version, 'dag-json', multihash))
-  })
-}
-
-const util = {serialize, deserialize, cid}
-
-const resolve = (binaryBlob, path, cb) => {
-  path = path.split('/').filter(x => x)
-  let obj = parse(binaryBlob)
-  let ret = (err, res) => setImmediate(() => cb(err, res))
-  while (path.length) {
-    let key = path.shift()
-    if (typeof obj[key] === 'undefined') {
-      return ret(new Error(`Key not found "${key}"`))
-    }
-    if (CID.isCID(obj[key])) {
-      let value = {'/': obj[key].toBaseEncodedString()}
-      return ret(null, {value, remainderPath: path.join('/')})
-    }
-    obj = obj[key]
+  async body () {
+    let [ overlayLength, bodyLength ] = this.header
+    let start = 8 + overlayLength
+    let buffer = await this.read(start, start + bodyLength)
+    return JSON.parse(buffer.toString())
   }
-  ret(null, {value: obj, remainderPath: path.join('/')})
-}
-
-const tree = (binaryBlob, cb) => {
-  let paths = []
-  let walk = (obj, _path = []) => {
-    for (let [key, value] of Object.entries(obj)) {
-      if (CID.isCID(value)) {
-        paths.push(_path.concat([key]).join('/'))
-      } else if (typeof value === 'object' && value !== null) {
-        walk(value, _path.concat([key]))
-      } else {
-        paths.push(_path.concat([key]).join('/'))
+  async decode () {
+    let buffersOffset = this.header.reduce((x,y) => x + y) + 8
+    let overlay = await this.overlay()
+    let body = await this.body()
+    let traverse = async obj => {
+      for (let [key, value] of Object.entries(obj)) {
+        if (typeof value === 'string') body[key] = new CID(value)
+        else if (Array.isArray(value)) {
+          let [ start, end ] = value
+          body[key] = await this.read(start + buffersOffset, end + buffersOffset)
+        } else if (value && typeof value === 'object') {
+          let _body = body
+          body = body[key]
+          await traverse(value)
+          body = _body
+        } else {
+          throw new Error(`Unkown type in overlay: ${typeof value}`)
+        }
       }
     }
+    await traverse(body)
+    return body
   }
-  let obj = parse(binaryBlob)
-  walk(obj)
-  return setImmediate(() => cb(null, paths.map(p => '/' + p)))
-}
-
-const resolver = {resolve, tree}
-
-const _interface = {
-  util,
-  resolver,
-  defaultHashAlg: 'sha2-256',
-  multicodec: 'dag-json'
 }
 
 const phash = promisify(multihashes)
+const encode = obj => (new Encoder(obj)).data
+const decode = buffer => (new Decoder(buffer)).decode()
 
-const mkblock = async (obj, algo = _interface.defaultHashAlg) => {
-  let str = stringify(obj)
-  let buff = Buffer.from(str)
-  let multihash = await phash(buff, algo)
+const mkblock = async (obj, algo='sha2-256') => {
+  let data = encode(obj)
+  let multihash = await phash(data, algo)
   let cid = new CID(1, 'dag-json', multihash)
-  return new Block(buff, cid)
+  return new Block(data, cid)
 }
 const from = input => {
   if (Block.isBlock(input)) {
     input = input.data
   }
-  return parse(input)
+  return decode(input)
 }
 
-module.exports = {parse, stringify, mkblock, from, interface: _interface}
+module.exports = {
+  mkblock, 
+  from,
+  encode,
+  decode
+}
+
