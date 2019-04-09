@@ -11,7 +11,7 @@
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com> (http://www.mikealrogers.com)",
   "license": "Apache-2.0",
   "dependencies": {
-    "cids": "^0.5.3",
+    "cids": "^0.6.0",
     "fast-json-stable-stringify": "^2.0.0",
     "ipfs-block": "^0.8.0",
     "is-circular": "^1.0.2",
