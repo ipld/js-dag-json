@@ -16,7 +16,7 @@
     "ipfs-block": "^0.8.0",
     "is-circular": "^1.0.2",
     "lodash.transform": "^4.6.0",
-    "multihashing-async": "^0.5.1"
+    "multihashing-async": "^0.6.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
