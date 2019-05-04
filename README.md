@@ -1,9 +1,13 @@
 ## JSON Directed Acrylic Graph for IPLD
 
+You probably don't want to use this library directly and instead
+access it through the Block interface.
+
 Usage:
 
 ```javascript
-const dj = require('dag-json')
+const Block = require('@ipld/block')
+const CID = require('cids')
 const obj = {
   x: 1,
   /* CID instances are encoded as links */
@@ -15,11 +19,9 @@ const obj = {
   }
 }
 
-let block = await dj.mkblock(obj)
-block.cid // instance of CID
-block.data // Buffer, node contents
-
-let decoded = dj.from(block)
+let encoder = Block.encoder(obj, 'dag-json')
+let encoded = await Block.encode() // binary encoded block
+let decoded = await Block.decoder(encoded, 'dag-json').decode()
 decoded.y[0] // 2
 CID.isCID(decoded.z.a) // true
 ```
@@ -41,58 +43,4 @@ That's all :)
 
 # API
 
-## Recommended API
-
-This implementation of `dag-json` for IPLD includes several low level
-methods for encoding/decoding nodes as well as a full interface suitable for
-IPFS.
-
-However, the recommended API is only 2 methods: `from` and `mkblock`.
-
-### `dj.mkblock(Object[, algorithm='sha2-256']`
-
-Async function that takes a JavaScript object and returns a Block instance.
-Note than all CID instances will be encoded as links.
-
-```javascript
-let block = await dj.mkblock({foo: 'bar'})
-```
-
-### `dj.from(Block||Buffer||string)`
-
-Takes a Block, Buffer, or string encoded `dag-json` node and return the
-decoded node. Note that all links will be `CID` instances.
-
-```javascript
-let block = await dj.mkblock({foo: 'bar'})
-let obj = dj.from(block)
-obj.foo // 'bar'
-```
-
-## IPLD/IPFS Standard Interface
-
-The full implementation is at `dj.interface`. It includes:
-
-* API
-  * IPLD format utils
-    * [dj.interface.util.serialize(dagNode, callback)](https://github.com/ipld/interface-ipld-format#utilserializedagnode-callback)
-    * [dj.interface.util.deserialize(binaryBlob, callback)](https://github.com/ipld/interface-ipld-format#utildeserializebinaryblob-callback)
-    * [dj.interface.util.cid(binaryBlob[, options], callback)](https://github.com/ipld/interface-ipld-format#utilcidbinaryblob-options-callback)
-  * Local resolver methods
-    * [dj.interface.resolver.resolve(binaryBlob, path, callback)](https://github.com/ipld/interface-ipld-format#resolverresolvebinaryblob-path-callback)
-    * [dj.interface.resolver.tree(binaryBlob[, options], callback)](https://github.com/ipld/interface-ipld-format#resolvertreebinaryblob-options-callback)
-  * Properties
-    * [dj.interface.defaultHashAlg](https://github.com/ipld/interface-ipld-format#defaulthashalg)
-    * [dj.interface.multicodec](https://github.com/ipld/interface-ipld-format#multicodec)
-
-## Additional APIs
-
-### `dj.parse(Buffer||string)`
-
-Takes a Buffer, or string encoded `dag-json` node and return the
-decoded node. Note that all links will be `CID` instances.
-
-### `dj.stringify(Object)`
-
-Async function that takes a JavaScript object and returns a string. Note
-than all CID instances will be encoded as links.
+This library exposes an interface conforming to [`@ipld/codec-interface`](https://github.com/ipld/js-ipld-codec-interface).
