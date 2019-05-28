@@ -15,9 +15,10 @@ const link = new CID('zdpuAtX7ZibcWdSKQwiDCkPjWwRvtcKCPku9H7LhgA4qJW4Wk')
 test('encode decode', async () => {
   let buffer = dag.encode({ hello: 'world' })
   same(JSON.parse(recode(buffer).toString()), { hello: 'world' })
-  let o = { link, buffer: Buffer.from('asdf') }
+  let o = { link, buffer: Buffer.from('asdf'), n: null, o: {} }
   buffer = dag.encode(o)
   same(dag.decode(buffer), o)
+  same(Buffer.isBuffer(dag.decode(buffer).buffer), true)
 })
 
 test('circular failure', async () => {

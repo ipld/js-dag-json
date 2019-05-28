@@ -8,6 +8,8 @@ const codecInterface = require('@ipld/codec-interface')
 let _encode = obj => transform(obj, (result, value, key) => {
   if (CID.isCID(value)) {
     result[key] = { '/': value.toBaseEncodedString() }
+  } else if (Buffer.isBuffer(value)) {
+    result[key] = { '/': { base64: value.toString('base64') } }
   } else if (typeof value === 'object' && value !== null) {
     result[key] = _encode(value)
   } else {
@@ -27,7 +29,10 @@ const encode = obj => {
 let _decode = obj => transform(obj, (result, value, key) => {
   if (typeof value === 'object' && value !== null) {
     if (value['/'] && Object.keys(value).length === 1) {
-      result[key] = new CID(value['/'])
+      if (typeof value['/'] === 'string') result[key] = new CID(value['/'])
+      else {
+        result[key] = Buffer.from(value['/'].base64, 'base64')
+      }
     } else {
       result[key] = _decode(value)
     }
