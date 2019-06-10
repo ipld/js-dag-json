@@ -28,11 +28,11 @@ const encode = obj => {
 
 let _decode = obj => transform(obj, (result, value, key) => {
   if (typeof value === 'object' && value !== null) {
-    if (value['/'] && Object.keys(value).length === 1) {
+    if (value['/']) {
       if (typeof value['/'] === 'string') result[key] = new CID(value['/'])
-      else {
+      else if (typeof value['/'] === 'object' && value['/'].base64) {
         result[key] = Buffer.from(value['/'].base64, 'base64')
-      }
+      } else result[key] = _decode(value)
     } else {
       result[key] = _decode(value)
     }
@@ -42,7 +42,7 @@ let _decode = obj => transform(obj, (result, value, key) => {
 })
 const decode = buffer => {
   let obj = JSON.parse(buffer.toString())
-  return _decode(obj)
+  return _decode({ value: obj }).value
 }
 
 module.exports = codecInterface.create(encode, decode, 'dag-json')

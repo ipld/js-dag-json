@@ -32,3 +32,8 @@ test('circular failure', async () => {
     same(e.message, 'Object contains circular references.')
   }
 })
+
+test('use reserved space', async () => {
+  let decoded = dag.decode(dag.encode({ '/': { type: 'stringName' } }))
+  same(decoded['/'].type, 'stringName')
+})
