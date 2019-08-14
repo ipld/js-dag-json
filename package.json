@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "nyc --check-coverage --branches 100 --functions 100 --lines 100 aegir test",
+    "test": "hundreds aegir test",
     "pretest": "aegir lint"
   },
   "repository": {
@@ -23,8 +23,7 @@
   "homepage": "https://github.com/mikeal/dag-json#readme",
   "devDependencies": {
     "aegir": "^18.2.2",
-    "nyc": "^14.1.0",
-    "standard": "^12.0.1",
+    "hundreds": "0.0.1",
     "tsame": "^2.0.1"
   },
   "dependencies": {
