@@ -1,5 +1,7 @@
 ## JSON Directed Acrylic Graph for IPLD
 
+![101633](https://img.shields.io/badge/compiled%20bundle-102k-yellow) ![29503](https://img.shields.io/badge/gzipped%20bundle-30k-yellowgreen)
+
 You probably don't want to use this library directly and instead
 access it through the Block interface.
 
