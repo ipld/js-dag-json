@@ -5,7 +5,7 @@ const isCircular = require('is-circular')
 const transform = require('lodash.transform')
 const codecInterface = require('@ipld/codec-interface')
 
-let _encode = obj => transform(obj, (result, value, key) => {
+const _encode = obj => transform(obj, (result, value, key) => {
   if (CID.isCID(value)) {
     result[key] = { '/': value.toBaseEncodedString() }
   } else if (Buffer.isBuffer(value)) {
@@ -22,11 +22,11 @@ const encode = obj => {
     throw new Error('Object contains circular references.')
   }
 
-  let data = _encode(obj)
+  const data = _encode(obj)
   return Buffer.from(json(data))
 }
 
-let _decode = obj => transform(obj, (result, value, key) => {
+const _decode = obj => transform(obj, (result, value, key) => {
   if (typeof value === 'object' && value !== null) {
     if (value['/']) {
       if (typeof value['/'] === 'string') result[key] = new CID(value['/'])
@@ -41,7 +41,7 @@ let _decode = obj => transform(obj, (result, value, key) => {
   }
 })
 const decode = buffer => {
-  let obj = JSON.parse(buffer.toString())
+  const obj = JSON.parse(buffer.toString())
   return _decode({ value: obj }).value
 }
 

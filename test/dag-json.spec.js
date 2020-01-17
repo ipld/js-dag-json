@@ -12,18 +12,19 @@ const recode = buffer => dag.encode(dag.decode(buffer))
 
 const link = new CID('zdpuAtX7ZibcWdSKQwiDCkPjWwRvtcKCPku9H7LhgA4qJW4Wk')
 
-test('encode decode', async () => {
+test('encode decode', done => {
   let buffer = dag.encode({ hello: 'world' })
   same(JSON.parse(recode(buffer).toString()), { hello: 'world' })
-  let o = { link, buffer: Buffer.from('asdf'), n: null, o: {} }
+  const o = { link, buffer: Buffer.from('asdf'), n: null, o: {} }
   buffer = dag.encode(o)
   same(dag.decode(buffer), o)
   same(Buffer.isBuffer(dag.decode(buffer).buffer), true)
+  done()
 })
 
-test('circular failure', async () => {
-  let o1 = { hello: 'world' }
-  let o2 = { o1 }
+test('circular failure', done => {
+  const o1 = { hello: 'world' }
+  const o2 = { o1 }
   o1.o2 = o2
   try {
     dag.encode(o2)
@@ -31,9 +32,11 @@ test('circular failure', async () => {
   } catch (e) {
     same(e.message, 'Object contains circular references.')
   }
+  done()
 })
 
-test('use reserved space', async () => {
-  let decoded = dag.decode(dag.encode({ '/': { type: 'stringName' } }))
+test('use reserved space', done => {
+  const decoded = dag.decode(dag.encode({ '/': { type: 'stringName' } }))
   same(decoded['/'].type, 'stringName')
+  done()
 })
