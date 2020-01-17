@@ -22,14 +22,14 @@
   },
   "homepage": "https://github.com/mikeal/dag-json#readme",
   "devDependencies": {
-    "aegir": "^18.2.2",
-    "hundreds": "0.0.1",
+    "aegir": "^20.5.1",
+    "hundreds": "0.0.2",
     "tsame": "^2.0.1"
   },
   "dependencies": {
-    "@ipld/codec-interface": "^1.0.3",
-    "cids": "~0.6.0",
-    "fast-json-stable-stringify": "^2.0.0",
+    "@ipld/codec-interface": "^1.0.7",
+    "cids": "~0.7.2",
+    "fast-json-stable-stringify": "^2.1.0",
     "is-circular": "^1.0.2",
     "lodash.transform": "^4.6.0"
   }
