@@ -7,8 +7,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "hundreds aegir test",
-    "pretest": "aegir lint"
+    "test": "hundreds mocha test/test-*.js && npm run test:browser",
+    "test:browser": "polendina --cleanup test/test-*.js",
+    "coverage": "nyc --reporter=html mocha test/test-*.js && npx st -d coverage -p 8080",
+    "pretest": "standard"
   },
   "repository": {
     "type": "git",
@@ -22,13 +24,13 @@
   },
   "homepage": "https://github.com/mikeal/dag-json#readme",
   "devDependencies": {
-    "aegir": "^21.3.0",
     "hundreds": "0.0.2",
-    "tsame": "^2.0.1"
+    "mocha": "^7.1.2",
+    "multiformats": "0.0.1",
+    "polendina": "^1.0.0",
+    "standard": "^14.3.4"
   },
   "dependencies": {
-    "@ipld/codec-interface": "^1.0.8",
-    "cids": "~0.7.3",
     "fast-json-stable-stringify": "^2.1.0",
     "is-circular": "^1.0.2",
     "lodash.transform": "^4.6.0"

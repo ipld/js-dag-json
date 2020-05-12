@@ -1,48 +1,53 @@
 'use strict'
 const json = require('fast-json-stable-stringify')
-const CID = require('cids')
 const isCircular = require('is-circular')
 const transform = require('lodash.transform')
-const codecInterface = require('@ipld/codec-interface')
 
-const _encode = obj => transform(obj, (result, value, key) => {
-  if (CID.isCID(value)) {
-    result[key] = { '/': value.toBaseEncodedString() }
-  } else if (Buffer.isBuffer(value)) {
-    result[key] = { '/': { base64: value.toString('base64') } }
-  } else if (typeof value === 'object' && value !== null) {
-    result[key] = _encode(value)
-  } else {
-    result[key] = value
-  }
-})
-
-const encode = obj => {
-  if (isCircular(obj)) {
-    throw new Error('Object contains circular references.')
-  }
-
-  const data = _encode(obj)
-  return Buffer.from(json(data))
-}
-
-const _decode = obj => transform(obj, (result, value, key) => {
-  if (typeof value === 'object' && value !== null) {
-    if (value['/']) {
-      if (typeof value['/'] === 'string') result[key] = new CID(value['/'])
-      else if (typeof value['/'] === 'object' && value['/'].base64) {
-        result[key] = Buffer.from(value['/'].base64, 'base64')
-      } else result[key] = _decode(value)
+module.exports = multiformats => {
+  const { CID, bytes, multibase } = multiformats
+  if (!multibase.has('base64')) throw new Error('Multibase must include base64')
+  if (!multibase.has('base32')) throw new Error('Multibase must include base32')
+  const _encode = obj => transform(obj, (result, value, key) => {
+    if (CID.isCID(value)) {
+      result[key] = { '/': value.toString() }
+    } else if (bytes.isBinary(value)) {
+      value = bytes.coerce(value)
+      result[key] = { '/': { base64: multibase.encode(value, 'base64') } }
+    } else if (typeof value === 'object' && value !== null) {
+      result[key] = _encode(value)
     } else {
-      result[key] = _decode(value)
+      result[key] = value
     }
-  } else {
-    result[key] = value
-  }
-})
-const decode = buffer => {
-  const obj = JSON.parse(buffer.toString())
-  return _decode({ value: obj }).value
-}
+  })
 
-module.exports = codecInterface.create(encode, decode, 'dag-json')
+  const encode = obj => {
+    if (isCircular(obj)) {
+      throw new Error('Object contains circular references.')
+    }
+
+    const data = _encode(obj)
+    return bytes.fromString(json(data))
+  }
+
+  const _decode = obj => transform(obj, (result, value, key) => {
+    if (typeof value === 'object' && value !== null) {
+      if (value['/']) {
+        if (typeof value['/'] === 'string') result[key] = new CID(value['/'])
+        else if (typeof value['/'] === 'object' && value['/'].base64) {
+          result[key] = multibase.decode(value['/'].base64, 'base64')
+        } else result[key] = _decode(value)
+      } else {
+        result[key] = _decode(value)
+      }
+    } else {
+      result[key] = value
+    }
+  })
+  const decode = buffer => {
+    const obj = JSON.parse(bytes.toString(buffer))
+    return _decode({ value: obj }).value
+  }
+  const name = 'dag-json'
+  const code = 0x0129
+  return { encode, decode, name, code }
+}
