@@ -5,14 +5,12 @@ const transform = require('lodash.transform')
 
 module.exports = multiformats => {
   const { CID, bytes, multibase } = multiformats
-  if (!multibase.has('base64')) throw new Error('Multibase must include base64')
-  if (!multibase.has('base32')) throw new Error('Multibase must include base32')
   const _encode = obj => transform(obj, (result, value, key) => {
     if (CID.isCID(value)) {
       result[key] = { '/': value.toString() }
     } else if (bytes.isBinary(value)) {
       value = bytes.coerce(value)
-      result[key] = { '/': { base64: multibase.encode(value, 'base64') } }
+      result[key] = { '/': { bytes: multibase.encode(value, 'base64') } }
     } else if (typeof value === 'object' && value !== null) {
       result[key] = _encode(value)
     } else {
@@ -32,10 +30,13 @@ module.exports = multiformats => {
   const _decode = obj => transform(obj, (result, value, key) => {
     if (typeof value === 'object' && value !== null) {
       if (value['/']) {
-        if (typeof value['/'] === 'string') result[key] = new CID(value['/'])
-        else if (typeof value['/'] === 'object' && value['/'].base64) {
-          result[key] = multibase.decode(value['/'].base64, 'base64')
-        } else result[key] = _decode(value)
+        if (typeof value['/'] === 'string') {
+          result[key] = new CID(value['/'])
+        } else if (typeof value['/'] === 'object' && value['/'].bytes) {
+          result[key] = multibase.decode(value['/'].bytes, 'base64')
+        } else {
+          result[key] = _decode(value)
+        }
       } else {
         result[key] = _decode(value)
       }

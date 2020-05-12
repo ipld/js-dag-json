@@ -43,20 +43,4 @@ describe('basic dag-json', () => {
     const decoded = dag.decode(dag.encode({ '/': { type: 'stringName' } }))
     same(decoded['/'].type, 'stringName')
   })
-
-  const testThrow = (fn, msg) => {
-    try {
-      fn()
-      throw new Error('Did not throw')
-    } catch (e) {
-      if (e.message !== msg) throw e
-    }
-  }
-
-  test('insufficient multibase', () => {
-    const multiformats = require('multiformats')()
-    testThrow(() => multiformats.add(require('../')), 'Multibase must include base64')
-    multiformats.multibase.add(require('multiformats/bases/base64'))
-    testThrow(() => multiformats.add(require('../')), 'Multibase must include base32')
-  })
 })
