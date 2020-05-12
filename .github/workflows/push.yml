@@ -1,4 +1,4 @@
-on: push
+on: [push, pull_request]
 name: Build and Publish
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
     - name: Test
       run: npm test
     - name: Publish
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/master' && github.repository == 'multiformats/js-multiformats'
       uses: mikeal/merge-release@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
