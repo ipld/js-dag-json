@@ -6,10 +6,11 @@ access it through the Block interface.
 Usage (w/ Block Interface):
 
 ```javascript
-const multiformats = require('multiformats/basics')
+import multiformats from 'multiformats/basics'
+import { create } from '@ipld/block'
 multiformats.add(require('@ipld/dag-json'))
-const Block = require('@ipld/block')(multiformats)
-const { CID } = multiformats
+const Block = create(multiformats)
+const { CID } = Block
 
 const obj = {
   x: 1,
