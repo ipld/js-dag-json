@@ -3,11 +3,15 @@
 You probably don't want to use this library directly and instead
 access it through the Block interface.
 
-Usage:
+Usage (w/ Block Interface):
 
 ```javascript
-const Block = require('@ipld/block')
-const CID = require('cids')
+import multiformats from 'multiformats/basics'
+import { create } from '@ipld/block'
+multiformats.add(require('@ipld/dag-json'))
+const Block = create(multiformats)
+const { CID } = Block
+
 const obj = {
   x: 1,
   /* CID instances are encoded as links */
