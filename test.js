@@ -1,10 +1,11 @@
 'use strict'
 /* globals describe, it */
-const main = require('../')
-const assert = require('assert')
-const multiformats = require('multiformats/basics')
+import main from './index.js'
+import assert from 'assert'
+import multiformats from 'multiformats/basics.js'
 
 multiformats.add(main)
+
 const { CID, multicodec, bytes } = multiformats
 const dag = {
   encode: v => multicodec.encode(v, 'dag-json'),

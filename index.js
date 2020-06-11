@@ -1,9 +1,8 @@
-'use strict'
-const json = require('fast-json-stable-stringify')
-const isCircular = require('is-circular')
-const transform = require('lodash.transform')
+import json from 'fast-json-stable-stringify'
+import isCircular from 'is-circular'
+import transform from 'lodash.transform'
 
-module.exports = multiformats => {
+export default multiformats => {
   const { CID, bytes, multibase } = multiformats
   const _encode = obj => transform(obj, (result, value, key) => {
     if (CID.isCID(value)) {

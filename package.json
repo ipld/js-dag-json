@@ -3,13 +3,14 @@
   "version": "0.0.0-dev",
   "description": "JSON Directed Acrylic Graph for IPLD",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "hundreds mocha test/test-*.js && npm run test:browser",
-    "test:browser": "polendina --cleanup test/test-*.js",
-    "coverage": "nyc --reporter=html mocha test/test-*.js && npx st -d coverage -p 8080",
+    "test": "hundreds mocha test.js && npm run test:browser",
+    "test:browser": "polendina --cleanup test.js",
+    "coverage": "c8 --reporter=html mocha test.js && npx st -d coverage -p 8080",
     "pretest": "standard"
   },
   "repository": {
@@ -24,9 +25,9 @@
   },
   "homepage": "https://github.com/mikeal/dag-json#readme",
   "devDependencies": {
-    "hundreds": "0.0.2",
-    "mocha": "^7.1.2",
-    "multiformats": "0.0.1",
+    "hundreds": "0.0.4",
+    "mocha": "^8.0.1",
+    "multiformats": "1.0.3",
     "polendina": "^1.0.0",
     "standard": "^14.3.4"
   },
