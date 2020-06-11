@@ -45,6 +45,3 @@ Nodes are in standard JSON format with the following requirements:
 
 That's all :)
 
-# API
-
-This library exposes an interface conforming to [`@ipld/codec-interface`](https://github.com/ipld/js-ipld-codec-interface).
