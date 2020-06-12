@@ -44,4 +44,18 @@ describe('basic dag-json', () => {
     const decoded = dag.decode(dag.encode({ '/': { type: 'stringName' } }))
     same(decoded['/'].type, 'stringName')
   })
+
+  test('native types', done => {
+    const flip = obj => dag.decode(dag.encode(obj))
+    same(flip('test'), 'test')
+    same(flip(null), null)
+    same(flip(12), 12)
+    same(flip(-1), -1)
+    same(flip(1.2), 1.2)
+    same(flip(true), true)
+    same(flip(false), false)
+    same(flip([]), [])
+    same(flip(['asdf']), ['asdf'])
+    done()
+  })
 })

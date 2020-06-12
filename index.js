@@ -18,12 +18,11 @@ export default multiformats => {
   })
 
   const encode = obj => {
-    if (typeof obj === 'object' && isCircular(obj)) {
-      throw new Error('Object contains circular references.')
+    if (typeof obj === 'object' && !bytes.isBinary(obj) && !CID.isCID(obj) && obj) {
+      if (isCircular(obj)) throw new Error('Object contains circular references.')
+      obj = _encode(obj)
     }
-
-    const data = _encode(obj)
-    return bytes.fromString(json(data))
+    return bytes.fromString(json(obj))
   }
 
   const _decode = obj => transform(obj, (result, value, key) => {
