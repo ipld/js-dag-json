@@ -18,7 +18,7 @@ export default multiformats => {
   })
 
   const encode = obj => {
-    if (isCircular(obj)) {
+    if (typeof obj === 'object' && isCircular(obj)) {
       throw new Error('Object contains circular references.')
     }
 
