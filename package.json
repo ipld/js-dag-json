@@ -8,7 +8,12 @@
     "test": "test"
   },
   "scripts": {
-    "test": "hundreds mocha test.js && npm run test:browser",
+    "build": "rollup --config rollup.config.js",
+    "prepublishOnly": "npm run build",
+    "lint": "standard",
+    "test:cjs": "npm run build && mocha dist/test.cjs",
+    "test:node": "hundreds mocha test.js",
+    "test": "npm run lint && npm run test:node && npm run test:browser && npm run test:cjs",
     "test:browser": "polendina --cleanup test.js",
     "coverage": "c8 --reporter=html mocha test.js && npx st -d coverage -p 8080",
     "pretest": "standard"
@@ -25,10 +30,11 @@
   },
   "homepage": "https://github.com/mikeal/dag-json#readme",
   "devDependencies": {
-    "hundreds": "0.0.4",
+    "hundreds": "0.0.7",
     "mocha": "^8.0.1",
-    "multiformats": "1.0.3",
+    "multiformats": "1.1.6",
     "polendina": "^1.0.0",
+    "rollup": "^2.17.1",
     "standard": "^14.3.4"
   },
   "dependencies": {
