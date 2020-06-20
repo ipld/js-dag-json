@@ -18,6 +18,10 @@
     "coverage": "c8 --reporter=html mocha test.js && npx st -d coverage -p 8080",
     "pretest": "standard"
   },
+  "exports": {
+    "require": "./dist/index.cjs",
+    "import": "./index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mikeal/dag-json.git"
