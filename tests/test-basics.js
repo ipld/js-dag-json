@@ -1,6 +1,6 @@
 'use strict'
 /* globals describe, it */
-import main from './index.js'
+import main from '../index.js'
 import assert from 'assert'
 import multiformats from 'multiformats/basics.js'
 
