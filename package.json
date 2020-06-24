@@ -11,10 +11,10 @@
     "build": "rollup --config rollup.config.js",
     "prepublishOnly": "npm run build",
     "lint": "standard",
-    "test:cjs": "npm run build && mocha dist/tests/test-*.cjs",
-    "test:node": "hundreds mocha tests/test-*.js",
+    "test:cjs": "npm run build && mocha dist/test/test-*.cjs",
+    "test:node": "hundreds mocha test/test-*.js",
     "test": "npm run lint && npm run test:node && npm run test:browser && npm run test:cjs",
-    "test:browser": "polendina --cleanup tests/test-*.js",
+    "test:browser": "polendina --cleanup test/test-*.js",
     "coverage": "c8 --reporter=html mocha test.js && npx st -d coverage -p 8080"
   },
   "exports": {

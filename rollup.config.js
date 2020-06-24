@@ -20,10 +20,10 @@ const relativeToMain = name => ({
 
 const plugins = [relativeToMain('@ipld/dag-cbor')]
 configs.push({
-  input: 'tests/test-basics.js',
+  input: 'test/test-basics.js',
   output: {
     plugins,
-    file: path.join('dist', 'tests', 'test-basics.cjs'),
+    file: path.join('dist', 'test', 'test-basics.cjs'),
     format: 'cjs'
   }
 })
