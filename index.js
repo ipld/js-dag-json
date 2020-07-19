@@ -1,12 +1,13 @@
 import json from 'fast-json-stable-stringify'
-import isCircular from 'is-circular'
+import isCircular from '@ipld/is-circular'
 import transform from 'lodash.transform'
 
 export default multiformats => {
   const { CID, bytes, multibase } = multiformats
   const _encode = obj => transform(obj, (result, value, key) => {
-    if (CID.isCID(value)) {
-      result[key] = { '/': value.toString() }
+    const cid = CID.asCID(value)
+    if (cid) {
+      result[key] = { '/': cid.toString() }
     } else if (bytes.isBinary(value)) {
       value = bytes.coerce(value)
       result[key] = { '/': { bytes: multibase.encode(value, 'base64') } }
@@ -18,8 +19,8 @@ export default multiformats => {
   })
 
   const encode = obj => {
-    if (typeof obj === 'object' && !bytes.isBinary(obj) && !CID.isCID(obj) && obj) {
-      if (isCircular(obj)) throw new Error('Object contains circular references.')
+    if (typeof obj === 'object' && !bytes.isBinary(obj) && !CID.asCID(obj) && obj) {
+      if (isCircular(CID, obj)) throw new Error('Object contains circular references.')
       obj = _encode(obj)
     }
     return bytes.fromString(json(obj))
