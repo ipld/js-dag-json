@@ -31,11 +31,11 @@
   },
   "homepage": "https://github.com/mikeal/dag-json#readme",
   "devDependencies": {
-    "hundreds": "0.0.7",
-    "mocha": "^8.0.1",
-    "multiformats": "2.0.1",
-    "polendina": "^1.0.0",
-    "rollup": "^2.22.1",
+    "hundreds": "0.0.8",
+    "mocha": "^8.1.1",
+    "multiformats": "3.0.0",
+    "polendina": "^1.1.0",
+    "rollup": "^2.26.3",
     "standard": "^14.3.4"
   },
   "dependencies": {

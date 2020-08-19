@@ -1,8 +1,8 @@
 'use strict'
 /* globals describe, it */
-import main from '../index.js'
+import main from '@ipld/dag-json'
 import assert from 'assert'
-import multiformats from 'multiformats/basics.js'
+import multiformats from 'multiformats/basics'
 
 multiformats.add(main)
 
@@ -16,7 +16,7 @@ const test = it
 
 const recode = buffer => dag.encode(dag.decode(buffer))
 
-const link = new CID('bafyreifepiu23okq5zuyvyhsoiazv2icw2van3s7ko6d3ixl5jx2yj2yhu')
+const link = CID.from('bafyreifepiu23okq5zuyvyhsoiazv2icw2van3s7ko6d3ixl5jx2yj2yhu')
 
 describe('basic dag-json', () => {
   test('encode decode', () => {

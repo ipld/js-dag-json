@@ -30,7 +30,7 @@ export default multiformats => {
     if (typeof value === 'object' && value !== null) {
       if (value['/']) {
         if (typeof value['/'] === 'string') {
-          result[key] = new CID(value['/'])
+          result[key] = CID.from(value['/'])
         } else if (typeof value['/'] === 'object' && value['/'].bytes) {
           result[key] = multibase.decode(value['/'].bytes, 'base64')
         } else {
