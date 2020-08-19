@@ -2,23 +2,21 @@
   "name": "@ipld/dag-json",
   "version": "0.0.0-dev",
   "description": "JSON Directed Acrylic Graph for IPLD",
-  "main": "index.js",
   "type": "module",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "rollup --config rollup.config.js",
-    "prepublishOnly": "npm run build",
     "lint": "standard",
-    "test:cjs": "npm run build && mocha dist/test/test-*.cjs",
+    "build": "npm_config_yes=true npx ipjs@latest build --tests",
+    "publish": "npm_config_yes=true npx ipjs@latest publish",
+    "test:cjs": "npm run build && mocha dist/cjs/node-test/test-*.js",
     "test:node": "hundreds mocha test/test-*.js",
-    "test": "npm run lint && npm run test:node && npm run test:browser && npm run test:cjs",
-    "test:browser": "polendina --cleanup test/test-*.js",
-    "coverage": "c8 --reporter=html mocha test.js && npx st -d coverage -p 8080"
+    "test:browser": "polendina --cleanup dist/cjs/node-test/test-*.js",
+    "test": "npm run lint && npm run test:node && npm run test:cjs && npm run test:browser",
+    "coverage": "c8 --reporter=html mocha test/test-*.js && npx st -d coverage -p 8080"
   },
   "exports": {
-    "require": "./dist/index.cjs",
     "import": "./index.js"
   },
   "repository": {
