@@ -32,16 +32,5 @@ CID.asCID(decoded.z.a) // cid instance
 
 # Spec
 
-The `dag-json` spec is quite simple.
-
-Nodes are in standard JSON format with the following requirements:
-
-* Objects are consistent and deterministic
-  * Object keys are sorted (TODO: specify sorting algorithm).
-  * No whitespace outside of values. `{"x":1,"y":[2,3]}`
-* Links are encoded as objects with a single `'/'` value of the
-  base58 encoded CID.
-  * `{"/": "QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4"}`
-
-That's all :)
+The [`dag-json` spec is in the IPLD specs repo](https://github.com/ipld/specs/blob/master/block-layer/codecs/dag-json.md).
 
