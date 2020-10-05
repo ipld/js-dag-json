@@ -20,7 +20,7 @@ const _encode = (obj) => transform(obj, (result, value, key) => {
 
 const encode = (obj) => {
   if (typeof obj === 'object' && !bytes.isBinary(obj) && !CID.asCID(obj) && obj) {
-    if (isCircular(CID, obj)) {
+    if (isCircular(obj, { asCID: true })) {
       throw new Error('Object contains circular references')
     }
     obj = _encode(obj)
