@@ -1,31 +1,24 @@
 'use strict'
 /* globals describe, it */
-import main from '@ipld/dag-json'
 import assert from 'assert'
-import multiformats from 'multiformats/basics'
+import { encode, decode } from '@ipld/dag-json'
+import { bytes, CID } from 'multiformats'
 
-multiformats.add(main)
-
-const { CID, multicodec, bytes } = multiformats
-const dag = {
-  encode: v => multicodec.encode(v, 'dag-json'),
-  decode: v => multicodec.decode(v, 'dag-json')
-}
 const same = assert.deepStrictEqual
 const test = it
 
-const recode = buffer => dag.encode(dag.decode(buffer))
+const recode = buffer => encode(decode(buffer))
 
-const link = CID.from('bafyreifepiu23okq5zuyvyhsoiazv2icw2van3s7ko6d3ixl5jx2yj2yhu')
+const link = CID.parse('bafyreifepiu23okq5zuyvyhsoiazv2icw2van3s7ko6d3ixl5jx2yj2yhu')
 
 describe('basic dag-json', () => {
   test('encode decode', () => {
-    let buffer = dag.encode({ hello: 'world' })
+    let buffer = encode({ hello: 'world' })
     same(JSON.parse(bytes.toString(recode(buffer))), { hello: 'world' })
     const o = { link, buffer: bytes.fromString('asdf'), n: null, o: {} }
-    buffer = dag.encode(o)
-    same(dag.decode(buffer), o)
-    same(bytes.isBinary(dag.decode(buffer).buffer), true)
+    buffer = encode(o)
+    same(decode(buffer), o)
+    same(bytes.isBinary(decode(buffer).buffer), true)
   })
 
   test('circular failure', () => {
@@ -33,20 +26,20 @@ describe('basic dag-json', () => {
     const o2 = { o1 }
     o1.o2 = o2
     try {
-      dag.encode(o2)
+      encode(o2)
       assert.ok(false)
     } catch (e) {
-      same(e.message, 'Object contains circular references.')
+      same(e.message, 'Object contains circular references')
     }
   })
 
   test('use reserved space', () => {
-    const decoded = dag.decode(dag.encode({ '/': { type: 'stringName' } }))
+    const decoded = decode(encode({ '/': { type: 'stringName' } }))
     same(decoded['/'].type, 'stringName')
   })
 
   test('native types', done => {
-    const flip = obj => dag.decode(dag.encode(obj))
+    const flip = obj => decode(encode(obj))
     same(flip('test'), 'test')
     same(flip(null), null)
     same(flip(12), 12)
