@@ -1,36 +1,41 @@
-## JSON Directed Acrylic Graph for IPLD
+# @ipld/dag-json
 
-You probably don't want to use this library directly and instead
-access it through the Block interface.
+An implementation of the [DAG-JSON spec](https://github.com/ipld/specs/blob/master/block-layer/codecs/dag-json.md) ("Directed Acyclic Graph for IPLD") for JavaScript designed for use with [multiformats](https://github.com/multiformats/js-multiformats) or via the higher-level `Block` abstraction in [@ipld/block](https://github.com/ipld/js-block).
 
-Usage (w/ Block Interface):
+## Example
 
 ```javascript
-import multiformats from 'multiformats/basics'
-import { create } from '@ipld/block'
-multiformats.add(require('@ipld/dag-json'))
-const Block = create(multiformats)
-const { CID } = Block
+import { encode, decode } from '@ipld/dag-json'
+import { CID } from 'multiformats'
 
 const obj = {
   x: 1,
   /* CID instances are encoded as links */
-  y: [2, 3, CID.from('QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4')],
+  y: [2, 3, CID.parse('QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4')],
   z: {
-    a: CID.from('QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4'),
+    a: CID.parse('QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4'),
     b: null,
     c: 'string'
   }
 }
 
-let encoder = Block.encoder(obj, 'dag-json')
-let encoded = await Block.encode() // binary encoded block
-let decoded = await Block.decoder(encoded, 'dag-json').decode()
+let data = encode(obj)
+let decoded = decode(data)
 decoded.y[0] // 2
 CID.asCID(decoded.z.a) // cid instance
 ```
 
-# Spec
+## Usage
 
-The [`dag-json` spec is in the IPLD specs repo](https://github.com/ipld/specs/blob/master/block-layer/codecs/dag-json.md).
+`@ipld/dag-pb` is designed to be used within multiformats but can be used separately. `encode()`, `decode()` are available as exports, as are `name` and `code` to match with the corresponding DAG-JSON [multicodec](https://github.com/multiformats/multicodec/).
 
+## License
+
+Licensed under either of
+
+ * Apache 2.0, ([LICENSE-APACHE](LICENSE-APACHE) / http://www.apache.org/licenses/LICENSE-2.0)
+ * MIT ([LICENSE-MIT](LICENSE-MIT) / http://opensource.org/licenses/MIT)
+
+### Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
