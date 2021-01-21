@@ -34,18 +34,16 @@
   "bugs": {
     "url": "https://github.com/ipld/js-dag-json/issues"
   },
-  "homepage": "https://github.com/ipld/js-dag-json",
+	"homepage": "https://github.com/ipld/js-dag-json",
   "dependencies": {
-    "@ipld/is-circular": "^2.0.0",
-    "@types/lodash.transform": "^4.6.6",
-    "fast-json-stable-stringify": "^2.1.0",
-    "lodash.transform": "^4.6.0",
     "multiformats": "^8.0.3"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "hundreds": "^0.0.9",
     "ipjs": "^5.0.0",
-    "mocha": "^8.3.2",
+    "ipld-garbage": "^2.0.0",
+    "mocha": "^8.2.1",
     "polendina": "^1.1.0",
     "standard": "^16.0.3",
     "typescript": "^4.2.4"
@@ -64,4 +62,5 @@
     }
   },
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com> (https://www.mikealrogers.com/)"
+  }
 }
