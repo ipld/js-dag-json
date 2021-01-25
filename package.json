@@ -36,6 +36,7 @@
   },
 	"homepage": "https://github.com/ipld/js-dag-json",
   "dependencies": {
+    "cborg": "github:rvagg/cborg#rvagg/json",
     "multiformats": "^8.0.3"
   },
   "devDependencies": {
@@ -62,5 +63,4 @@
     }
   },
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com> (https://www.mikealrogers.com/)"
-  }
 }
