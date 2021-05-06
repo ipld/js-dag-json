@@ -40,7 +40,7 @@
     "@types/lodash.transform": "^4.6.6",
     "fast-json-stable-stringify": "^2.1.0",
     "lodash.transform": "^4.6.0",
-    "multiformats": "^7.0.0"
+    "multiformats": "^8.0.3"
   },
   "devDependencies": {
     "hundreds": "^0.0.9",
