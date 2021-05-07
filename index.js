@@ -9,6 +9,15 @@ import * as cborgJson from 'cborg/json'
  * @typedef {import('multiformats/codecs/interface').BlockCodec<Code, T>} BlockCodec
  */
 
+/**
+ * cidEncoder will receive all Objects during encode, it needs to filter out
+ * anything that's not a CID and return `null` for that so it's encoded as
+ * normal. Encoding a CID means replacing it with a `{"/":"<CidString>}`
+ * object as per the DAG-JSON spec.
+ *
+ * @param {any} obj
+ * @returns {Token[]|null}
+ */
 function cidEncoder (obj) {
   if (obj.asCID !== obj) {
     return null // any other kind of object
@@ -29,6 +38,14 @@ function cidEncoder (obj) {
   ]
 }
 
+/**
+ * bytesEncoder will receive all Uint8Arrays (and friends) during encode, it
+ * needs to replace it with a `{"/":{"bytes":"Base64ByteString"}}` object as
+ * per the DAG-JSON spec.
+ *
+ * @param {Uint8Array} bytes
+ * @returns {Token[]|null}
+ */
 function bytesEncoder (bytes) {
   const bytesString = base64.encode(bytes)
   return [
@@ -42,10 +59,24 @@ function bytesEncoder (bytes) {
   ]
 }
 
+/**
+ * Intercept all `undefined` values from an object walk and reject the entire
+ * object if we find one.
+ *
+ * @returns {null}
+ */
 function undefinedEncoder () {
   throw new Error('`undefined` is not supported by the IPLD Data Model and cannot be encoded')
 }
 
+/**
+ * Intercept all `number` values from an object walk and reject the entire
+ * object if we find something that doesn't fit the IPLD data model (NaN &
+ * Infinity).
+ *
+ * @param {number} num
+ * @returns {null}
+ */
 function numberEncoder (num) {
   if (Number.isNaN(num)) {
     throw new Error('`NaN` is not supported by the IPLD Data Model and cannot be encoded')
@@ -53,6 +84,7 @@ function numberEncoder (num) {
   if (num === Infinity || num === -Infinity) {
     throw new Error('`Infinity` and `-Infinity` is not supported by the IPLD Data Model and cannot be encoded')
   }
+  return null // process with standard number encoder
 }
 
 const encodeOptions = {
@@ -65,13 +97,14 @@ const encodeOptions = {
   }
 }
 
-function _encode (obj) {
-  return cborgJson.encode(obj, encodeOptions)
-}
-
 class DagJsonTokenizer extends cborgJson.Tokenizer {
+  /**
+   * @param {Uint8Array} data
+   * @param {object} [options]
+   */
   constructor (data, options) {
     super(data, options)
+    /** @type {Token[]} */
     this.tokenBuffer = []
   }
 
@@ -133,17 +166,13 @@ const decodeOptions = {
   // safe-integer range, which may surprise users
   strict: true,
   useMaps: false,
+  /** @type {import('cborg').TagDecoder[]} */
   tags: []
 }
 
 // we're going to get TAG(42)STRING("bafy...") from the tokenizer so we only need
 // to deal with the STRING("bafy...") at this point
 decodeOptions.tags[42] = CID.parse
-
-function _decode (byts) {
-  const options = Object.assign(decodeOptions, { tokenizer: new DagJsonTokenizer(byts) })
-  return cborgJson.decode(byts, options)
-}
 
 /**
  * @template T
@@ -152,6 +181,20 @@ function _decode (byts) {
 export const { name, code, decode, encode } = {
   name: 'dag-json',
   code: 0x0129,
-  encode: _encode,
-  decode: _decode
+  /**
+   * @template T
+   * @param {T} node
+   * @returns {Uint8Array}
+   */
+  encode: (node) => cborgJson.encode(node, encodeOptions),
+  /**
+   * @template T
+   * @param {Uint8Array} data
+   * @returns {T}
+   */
+  decode: (data) => {
+    // the tokenizer is stateful so we need a single instance of it
+    const options = Object.assign(decodeOptions, { tokenizer: new DagJsonTokenizer(data) })
+    return cborgJson.decode(data, options)
+  }
 }
