@@ -1,6 +1,6 @@
 'use strict'
 /* eslint-env mocha */
-import garbage from 'ipld-garbage'
+import { garbage } from 'ipld-garbage'
 import chai from 'chai'
 import { encode, decode } from '@ipld/dag-json'
 import { bytes, CID } from 'multiformats'
