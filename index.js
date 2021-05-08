@@ -8,6 +8,9 @@ import * as cborgJson from 'cborg/json'
  * @template T
  * @typedef {import('multiformats/codecs/interface').BlockCodec<Code, T>} BlockCodec
  */
+/**
+ * @typedef {import('cborg/interface').DecodeTokenizer} DecodeTokenizer
+ */
 
 /**
  * cidEncoder will receive all Objects during encode, it needs to filter out
@@ -97,6 +100,9 @@ const encodeOptions = {
   }
 }
 
+/**
+ * @implements {DecodeTokenizer}
+ */
 class DagJsonTokenizer extends cborgJson.Tokenizer {
   /**
    * @param {Uint8Array} data
@@ -108,14 +114,29 @@ class DagJsonTokenizer extends cborgJson.Tokenizer {
     this.tokenBuffer = []
   }
 
+  /**
+   * @returns {boolean}
+   */
   done () {
     return this.tokenBuffer.length === 0 && super.done()
   }
 
+  /**
+   * @returns {Token}
+   */
   _next () {
-    return this.tokenBuffer.length ? this.tokenBuffer.pop() : super.next()
+    if (this.tokenBuffer.length > 0) {
+      // @ts-ignore https://github.com/Microsoft/TypeScript/issues/30406
+      return this.tokenBuffer.pop()
+    }
+    return super.next()
   }
 
+  /**
+   * Implements rules outlined in https://github.com/ipld/specs/pull/356
+   *
+   * @returns {Token}
+   */
   next () {
     const token = this._next()
 
