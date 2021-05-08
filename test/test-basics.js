@@ -49,7 +49,7 @@ describe('basic dag-json', () => {
     })
   })
 
-  test('native types', done => {
+  test('native types', () => {
     const flip = obj => decode(encode(obj))
     same(flip('test'), 'test')
     same(flip(null), null)
@@ -60,7 +60,8 @@ describe('basic dag-json', () => {
     same(flip(false), false)
     same(flip([]), [])
     same(flip(['asdf']), ['asdf'])
-    done()
+    same(decode(new TextEncoder().encode('10.0')), 10)
+    same(decode(new TextEncoder().encode('[-10.0, 1.0, 0.0, 100.0]')), [-10, 1, 0, 100])
   })
 
   test('stable map key sorting', () => {
