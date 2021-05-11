@@ -23,6 +23,14 @@ describe('basic dag-json', () => {
     same(bytes.isBinary(decode(byts).byts), true)
   })
 
+  test('encode decode 2', () => {
+    const obj = { plain: 'olde string', bytes: new TextEncoder().encode('deadbeef') }
+    const expected = '{"plain":"olde string","bytes": {"/":{"bytes":"mZGVhZGJlZWY"}}}'
+    const byts = encode(obj)
+    same(JSON.parse(bytes.toString(recode(byts))), JSON.parse(expected))
+    same(bytes.toString(recode(byts)), expected)
+  })
+
   describe('reserved space', () => {
     test('allow alternative types', () => {
       //  wrong types
