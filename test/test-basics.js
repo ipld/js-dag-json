@@ -23,6 +23,15 @@ describe('basic dag-json', () => {
     same(bytes.isBinary(decode(byts).byts), true)
   })
 
+  test('encode decode 2', () => {
+    // mirrors a go-ipld-prime test, but with sorted keys
+    const obj = { plain: 'olde string', bytes: new TextEncoder().encode('deadbeef') }
+    const expected = '{"bytes":{"/":{"bytes":"ZGVhZGJlZWY"}},"plain":"olde string"}'
+    const byts = encode(obj)
+    same(JSON.parse(bytes.toString(recode(byts))), JSON.parse(expected))
+    same(bytes.toString(recode(byts)), expected)
+  })
+
   describe('reserved space', () => {
     test('allow alternative types', () => {
       //  wrong types
@@ -35,7 +44,7 @@ describe('basic dag-json', () => {
     test('allow specials within reserved space', () => {
       // can we put slash-objects within slashes?
       same(decode(encode({ '/': bytes.fromString('asdf') })), { '/': bytes.fromString('asdf') })
-      same(new TextDecoder().decode(encode({ '/': bytes.fromString('asdf') })), '{"/":{"/":{"bytes":"mYXNkZg"}}}')
+      same(new TextDecoder().decode(encode({ '/': bytes.fromString('asdf') })), '{"/":{"/":{"bytes":"YXNkZg"}}}')
       same(decode(encode({ '/': link })), { '/': link })
       same(new TextDecoder().decode(encode({ '/': link })), '{"/":{"/":"bafyreifepiu23okq5zuyvyhsoiazv2icw2van3s7ko6d3ixl5jx2yj2yhu"}}')
     })

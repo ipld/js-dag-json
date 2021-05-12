@@ -50,7 +50,7 @@ function cidEncoder (obj) {
  * @returns {Token[]|null}
  */
 function bytesEncoder (bytes) {
-  const bytesString = base64.encode(bytes)
+  const bytesString = base64.encode(bytes).slice(1) // no mbase prefix
   return [
     new Token(Type.map, Infinity, 1),
     new Token(Type.string, '/', 1), // key
@@ -163,7 +163,7 @@ class DagJsonTokenizer extends cborgJson.Tokenizer {
                   throw new Error('Invalid encoded Bytes form')
                 }
               }
-              const bytes = base64.decode(innerValueToken.value)
+              const bytes = base64.decode(`m${innerValueToken.value}`)
               return new Token(Type.bytes, bytes, innerValueToken.value.length)
             }
             this.tokenBuffer.push(innerValueToken) // bail
