@@ -4,9 +4,8 @@ import { Token, Type } from 'cborg'
 import * as cborgJson from 'cborg/json'
 
 /**
- * @template {number} Code
  * @template T
- * @typedef {import('multiformats/codecs/interface').BlockCodec<Code, T>} BlockCodec
+ * @typedef {import('multiformats/codecs/interface').ByteView<T>} ByteView
  */
 /**
  * @typedef {import('cborg/interface').DecodeTokenizer} DecodeTokenizer
@@ -195,27 +194,23 @@ const decodeOptions = {
 // to deal with the STRING("bafy...") at this point
 decodeOptions.tags[42] = CID.parse
 
+export const name = 'dag-json'
+export const code = 0x0129
+
 /**
  * @template T
- * @type {BlockCodec<0x0129, T>}
+ * @param {T} node
+ * @returns {ByteView<T>}
  */
-export const { name, code, decode, encode } = {
-  name: 'dag-json',
-  code: 0x0129,
-  /**
-   * @template T
-   * @param {T} node
-   * @returns {Uint8Array}
-   */
-  encode: (node) => cborgJson.encode(node, encodeOptions),
-  /**
-   * @template T
-   * @param {Uint8Array} data
-   * @returns {T}
-   */
-  decode: (data) => {
-    // the tokenizer is stateful so we need a single instance of it
-    const options = Object.assign(decodeOptions, { tokenizer: new DagJsonTokenizer(data) })
-    return cborgJson.decode(data, options)
-  }
+export const encode = (node) => cborgJson.encode(node, encodeOptions)
+
+/**
+ * @template T
+ * @param {ByteView<T>} data
+ * @returns {T}
+ */
+export const decode = (data) => {
+  // the tokenizer is stateful so we need a single instance of it
+  const options = Object.assign(decodeOptions, { tokenizer: new DagJsonTokenizer(data) })
+  return cborgJson.decode(data, options)
 }
