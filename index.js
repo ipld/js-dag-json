@@ -211,6 +211,6 @@ export const encode = (node) => cborgJson.encode(node, encodeOptions)
  */
 export const decode = (data) => {
   // the tokenizer is stateful so we need a single instance of it
-  const options = Object.assign(decodeOptions, { tokenizer: new DagJsonTokenizer(data) })
+  const options = Object.assign(decodeOptions, { tokenizer: new DagJsonTokenizer(data, decodeOptions) })
   return cborgJson.decode(data, options)
 }

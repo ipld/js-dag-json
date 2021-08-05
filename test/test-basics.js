@@ -80,6 +80,32 @@ describe('basic dag-json', () => {
     same('{"a":1,"b":2,"bb":2.2,"c":3,"c_":3.3}', s2)
   })
 
+  test('bigints', () => {
+    const verify = (inp) => {
+      assert.strictEqual(decode(new TextEncoder().encode(String(inp))), inp)
+    }
+
+    // plain Number objects
+    verify(0)
+    verify(1)
+    verify(-1)
+    verify(Math.pow(2, 50))
+    verify(-Math.pow(2, 50))
+    verify(Number.MAX_SAFE_INTEGER)
+    verify(-Number.MAX_SAFE_INTEGER)
+    // should round-trip as BigInts
+    verify(BigInt('9007199254740992')) // Number.MAX_SAFE_INTEGER+1
+    verify(BigInt('9007199254740993'))
+    verify(BigInt('11959030306112471731'))
+    verify(BigInt('18446744073709551615')) // max uint64
+    verify(BigInt('9223372036854775807')) // max int64
+    verify(BigInt('-9007199254740992'))
+    verify(BigInt('-9007199254740993'))
+    verify(BigInt('-9223372036854776000')) // min int64
+    verify(BigInt('-11959030306112471732'))
+    verify(BigInt('-18446744073709551616')) // min -uint64
+  })
+
   test('error on circular references', () => {
     const circularObj = {}
     circularObj.a = circularObj
