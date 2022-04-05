@@ -1,3 +1,15 @@
+### [8.0.9](https://github.com/ipld/js-dag-json/compare/v8.0.8...v8.0.9) (2022-04-05)
+
+
+### Bug Fixes
+
+* typo in the readme ([#63](https://github.com/ipld/js-dag-json/issues/63)) ([1168651](https://github.com/ipld/js-dag-json/commit/1168651de0b0977b369faaac0a39495eb39e63b1))
+
+
+### Trivial Changes
+
+* **no-release:** bump actions/setup-node from 3.0.0 to 3.1.0 ([#62](https://github.com/ipld/js-dag-json/issues/62)) ([67c71d6](https://github.com/ipld/js-dag-json/commit/67c71d6a5f60d202c5dd4ace5b3766d4c812f3c6))
+
 ### [8.0.8](https://github.com/ipld/js-dag-json/compare/v8.0.7...v8.0.8) (2022-03-02)
 
 
