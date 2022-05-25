@@ -1,3 +1,16 @@
+### [8.0.10](https://github.com/ipld/js-dag-json/compare/v8.0.9...v8.0.10) (2022-05-25)
+
+
+### Trivial Changes
+
+* **deps-dev:** bump typescript from 4.6.4 to 4.7.2 ([645255c](https://github.com/ipld/js-dag-json/commit/645255c916104dc5129f1d701eac40119bebf996))
+* **no-release:** bump actions/setup-node from 3.1.0 to 3.1.1 ([#64](https://github.com/ipld/js-dag-json/issues/64)) ([9e3eb91](https://github.com/ipld/js-dag-json/commit/9e3eb91079105d435129de7bf364d75f60dfbb91))
+* **no-release:** bump actions/setup-node from 3.1.1 to 3.2.0 ([#69](https://github.com/ipld/js-dag-json/issues/69)) ([46bf66d](https://github.com/ipld/js-dag-json/commit/46bf66d1d9f6e03fd3e051c61abb9f7625b1c664))
+* **no-release:** bump mocha from 9.2.2 to 10.0.0 ([#66](https://github.com/ipld/js-dag-json/issues/66)) ([cf98d70](https://github.com/ipld/js-dag-json/commit/cf98d701a650baf50ddbe30d777aad1c71ec8867))
+* **no-release:** bump polendina from 2.0.15 to 3.0.0 ([#67](https://github.com/ipld/js-dag-json/issues/67)) ([3993975](https://github.com/ipld/js-dag-json/commit/3993975dff22b013664348caf94df83e3976a8d5))
+* **no-release:** bump polendina from 3.0.0 to 3.1.0 ([#68](https://github.com/ipld/js-dag-json/issues/68)) ([3724268](https://github.com/ipld/js-dag-json/commit/37242680dde12d83f0de38d181312298f80469d8))
+* **no-release:** bump standard from 16.0.4 to 17.0.0 ([#65](https://github.com/ipld/js-dag-json/issues/65)) ([80dcb64](https://github.com/ipld/js-dag-json/commit/80dcb64ef7502d1b353707d9e58fc9fe939cc263))
+
 ### [8.0.9](https://github.com/ipld/js-dag-json/compare/v8.0.8...v8.0.9) (2022-04-05)
 
 
