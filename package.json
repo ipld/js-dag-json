@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "cborg": "^1.5.4",
-    "multiformats": "^9.5.4"
+    "multiformats": "^10.0.0"
   },
   "devDependencies": {
     "c8": "^7.10.0",
