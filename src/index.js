@@ -1,3 +1,4 @@
+/* eslint max-depth: ["error", 7] */
 import { CID } from 'multiformats'
 import { base64 } from 'multiformats/bases/base64'
 import { Token, Type } from 'cborg'
@@ -61,6 +62,7 @@ function bytesEncoder (bytes) {
   ]
 }
 
+// eslint-disable-next-line jsdoc/require-returns-check
 /**
  * Intercept all `undefined` values from an object walk and reject the entire
  * object if we find one.
