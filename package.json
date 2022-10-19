@@ -65,7 +65,7 @@
     "lint": "aegir lint",
     "build": "aegir build",
     "release": "aegir release",
-    "test": "npm run lint && aegir test -t node -t browser -t webworker -t electron-main",
+    "test": "npm run lint && aegir test",
     "test:ts": "npm run test --prefix test/ts-use",
     "test:node": "aegir test -t node --cov",
     "test:chrome": "aegir test -t browser --cov",
@@ -77,18 +77,10 @@
   },
   "dependencies": {
     "cborg": "^1.5.4",
-    "multiformats": "^9.5.4"
+    "multiformats": "^10.0.2"
   },
   "devDependencies": {
-    "aegir": "^37.5.6",
-    "ipld-garbage": "^5.0.0"
-  },
-  "directories": {
-    "test": "test"
-  },
-  "standard": {
-    "ignore": [
-      "dist"
-    ]
+    "@ipld/garbage": "^6.0.0",
+    "aegir": "^37.5.6"
   }
 }

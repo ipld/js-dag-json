@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import { garbage } from 'ipld-garbage'
+import { garbage } from '@ipld/garbage'
 import { assert } from 'aegir/chai'
 import { encode, decode } from '../src/index.js'
 import { bytes, CID } from 'multiformats'
@@ -13,12 +13,12 @@ const link = CID.parse('bafyreifepiu23okq5zuyvyhsoiazv2icw2van3s7ko6d3ixl5jx2yj2
 
 describe('basic dag-json', () => {
   test('encode decode', () => {
-    let byts = encode({ hello: 'world' })
+    const byts = encode({ hello: 'world' })
     same(JSON.parse(bytes.toString(recode(byts))), { hello: 'world' })
     const o = { link, byts: bytes.fromString('asdf'), n: null, o: {} }
-    byts = encode(o)
-    same(decode(byts), o)
-    same(bytes.isBinary(decode(byts).byts), true)
+    const byts2 = encode(o)
+    same(decode(byts2), o)
+    same(bytes.isBinary(decode(byts2).byts), true)
   })
 
   test('encode decode 2', () => {
