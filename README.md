@@ -1,6 +1,23 @@
-# @ipld/dag-json
+# @ipld/dag-json <!-- omit in toc -->
 
-An implementation of the [DAG-JSON spec](https://github.com/ipld/specs/blob/master/block-layer/codecs/dag-json.md) ("Directed Acyclic Graph for IPLD") for JavaScript designed for use with [multiformats](https://github.com/multiformats/js-multiformats) or via the higher-level `Block` abstraction in [@ipld/block](https://github.com/ipld/js-block).
+[![codecov](https://img.shields.io/codecov/c/github/ipld/js-dag-json.svg?style=flat-square)](https://codecov.io/gh/ipld/js-dag-json)
+[![CI](https://img.shields.io/github/workflow/status/ipld/js-dag-json/test%20&%20maybe%20release/master?style=flat-square)](https://github.com/ipld/js-dag-json/actions/workflows/js-test-and-release.yml)
+
+> JS implementation of DAG-JSON
+
+## Table of contents <!-- omit in toc -->
+
+- [Install](#install)
+- [Example](#example)
+- [Usage](#usage)
+- [License](#license)
+- [Contribute](#contribute)
+
+## Install
+
+```console
+$ npm i @ipld/dag-json
+```
 
 ## Example
 
@@ -33,9 +50,9 @@ CID.asCID(decoded.z.a) // cid instance
 
 Licensed under either of
 
- * Apache 2.0, ([LICENSE-APACHE](LICENSE-APACHE) / http://www.apache.org/licenses/LICENSE-2.0)
- * MIT ([LICENSE-MIT](LICENSE-MIT) / http://opensource.org/licenses/MIT)
+- Apache 2.0, ([LICENSE-APACHE](LICENSE-APACHE) / <http://www.apache.org/licenses/LICENSE-2.0>)
+- MIT ([LICENSE-MIT](LICENSE-MIT) / <http://opensource.org/licenses/MIT>)
 
-### Contribution
+## Contribute
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.

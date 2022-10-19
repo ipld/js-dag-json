@@ -1,26 +1,24 @@
-'use strict'
 /* eslint-env mocha */
-import { garbage } from 'ipld-garbage'
-import chai from 'chai'
-import { encode, decode } from '@ipld/dag-json'
+import { garbage } from '@ipld/garbage'
+import { assert } from 'aegir/chai'
+import { encode, decode } from '../src/index.js'
 import { bytes, CID } from 'multiformats'
 
-const { assert } = chai
 const same = assert.deepStrictEqual
 const test = it
 
-const recode = byts => encode(decode(byts))
+const recode = (/** @type {Uint8Array} */ byts) => encode(decode(byts))
 
 const link = CID.parse('bafyreifepiu23okq5zuyvyhsoiazv2icw2van3s7ko6d3ixl5jx2yj2yhu')
 
 describe('basic dag-json', () => {
   test('encode decode', () => {
-    let byts = encode({ hello: 'world' })
+    const byts = encode({ hello: 'world' })
     same(JSON.parse(bytes.toString(recode(byts))), { hello: 'world' })
     const o = { link, byts: bytes.fromString('asdf'), n: null, o: {} }
-    byts = encode(o)
-    same(decode(byts), o)
-    same(bytes.isBinary(decode(byts).byts), true)
+    const byts2 = encode(o)
+    same(decode(byts2), o)
+    same(bytes.isBinary(decode(byts2).byts), true)
   })
 
   test('encode decode 2', () => {
@@ -59,7 +57,7 @@ describe('basic dag-json', () => {
   })
 
   test('native types', () => {
-    const flip = obj => decode(encode(obj))
+    const flip = (/** @type {any} */ obj) => decode(encode(obj))
     same(flip('test'), 'test')
     same(flip(null), null)
     same(flip(12), 12)
@@ -81,7 +79,7 @@ describe('basic dag-json', () => {
   })
 
   test('bigints', () => {
-    const verify = (inp) => {
+    const verify = (/** @type {number | bigint} **/ inp) => {
       assert.strictEqual(decode(new TextEncoder().encode(String(inp))), inp)
     }
 
@@ -133,6 +131,7 @@ describe('basic dag-json', () => {
 
   test('fuzz serialize and deserialize with garbage', function () {
     // filter out fuzz garbage for objects that are disqualified by DAG-JSON rules
+    /** @type {(obj: any) => boolean} */
     const checkObj = (obj) => {
       if (Array.isArray(obj)) {
         return obj.every(checkObj)
@@ -161,14 +160,9 @@ describe('basic dag-json', () => {
       if (!checkObj(original)) {
         continue
       }
-      try {
-        const encoded = encode(original)
-        const decoded = decode(encoded)
-        same(decoded, original)
-      } catch (err) {
-        console.log('Failed on fuzz object:', original)
-        throw err
-      }
+      const encoded = encode(original)
+      const decoded = decode(encoded)
+      same(decoded, original)
     }
   })
 })
