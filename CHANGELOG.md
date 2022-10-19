@@ -1,3 +1,22 @@
+## [9.0.0](https://github.com/ipld/js-dag-json/compare/v8.0.11...v9.0.0) (2022-10-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* publish as esm-only (#80)
+
+### Features
+
+* publish as esm-only ([#80](https://github.com/ipld/js-dag-json/issues/80)) ([131ea8e](https://github.com/ipld/js-dag-json/commit/131ea8e91fba1845ff755f8e8e6672fdf0919ca3))
+
+
+### Trivial Changes
+
+* **no-release:** bump actions/setup-node from 3.4.1 to 3.5.0 ([#76](https://github.com/ipld/js-dag-json/issues/76)) ([30578b4](https://github.com/ipld/js-dag-json/commit/30578b4f3dc7f2d3b1517ba69965115d17d74e16))
+* **no-release:** bump actions/setup-node from 3.5.0 to 3.5.1 ([#79](https://github.com/ipld/js-dag-json/issues/79)) ([a59b710](https://github.com/ipld/js-dag-json/commit/a59b710d3585ea6f07cbc4890a1c4d100a8bec4e))
+* **no-release:** bump ipld-garbage from 4.0.10 to 5.0.0 ([#72](https://github.com/ipld/js-dag-json/issues/72)) ([6e428e1](https://github.com/ipld/js-dag-json/commit/6e428e1ad953495c2c6546b020faeb898ab812d7))
+* update project config ([cf08c02](https://github.com/ipld/js-dag-json/commit/cf08c02c1ada814e43c34c6df24d464718d581d8))
+
 ## [8.0.11](https://github.com/ipld/js-dag-json/compare/v8.0.10...v8.0.11) (2022-08-27)
 
 
