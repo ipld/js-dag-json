@@ -22,7 +22,7 @@ import * as cborgJson from 'cborg/json'
  * @returns {Token[]|null}
  */
 function cidEncoder (obj) {
-  if (obj['/'] == null || obj['/'] !== obj.bytes) {
+  if (obj.asCID !== obj && obj['/'] !== obj.bytes) {
     return null // any other kind of object
   }
   const cid = CID.asCID(obj)
