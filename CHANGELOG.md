@@ -1,3 +1,10 @@
+## [9.0.1](https://github.com/ipld/js-dag-json/compare/v9.0.0...v9.0.1) (2022-10-24)
+
+
+### Bug Fixes
+
+* bring back asCID check for backward compat with multiformats@<10 ([#83](https://github.com/ipld/js-dag-json/issues/83)) ([fe19208](https://github.com/ipld/js-dag-json/commit/fe19208aef881769470d5e9730ba434a3076346e))
+
 ## [9.0.0](https://github.com/ipld/js-dag-json/compare/v8.0.11...v9.0.0) (2022-10-19)
 
 
