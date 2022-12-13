@@ -9,6 +9,10 @@ import * as cborgJson from 'cborg/json'
  * @typedef {import('multiformats/codecs/interface').ByteView<T>} ByteView
  */
 /**
+ * @template T
+ * @typedef {import('multiformats').ToString<T>} ToString
+ */
+/**
  * @typedef {import('cborg/interface').DecodeTokenizer} DecodeTokenizer
  */
 
@@ -216,3 +220,20 @@ export const decode = (data) => {
   const options = Object.assign(decodeOptions, { tokenizer: new DagJsonTokenizer(data, decodeOptions) })
   return cborgJson.decode(data, options)
 }
+
+/**
+ * @template T
+ * @param {T} node
+ * @returns {ToString<T>}
+ */
+export const format = (node) => utf8Decoder.decode(encode(node))
+export { format as stringify }
+const utf8Decoder = new TextDecoder()
+
+/**
+ * @template T
+ * @param {ToString<T>} data
+ * @returns {T}
+ */
+export const parse = (data) => decode(utf8Encoder.encode(data))
+const utf8Encoder = new TextEncoder()
