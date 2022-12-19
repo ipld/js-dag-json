@@ -1,3 +1,10 @@
+## [9.1.0](https://github.com/ipld/js-dag-json/compare/v9.0.1...v9.1.0) (2022-12-19)
+
+
+### Features
+
+* export parse / stringify functions ([#88](https://github.com/ipld/js-dag-json/issues/88)) ([1ae3f70](https://github.com/ipld/js-dag-json/commit/1ae3f708a624d5aaa5548a3360d7ccd8004e46e5))
+
 ## [9.0.1](https://github.com/ipld/js-dag-json/compare/v9.0.0...v9.0.1) (2022-10-24)
 
 
