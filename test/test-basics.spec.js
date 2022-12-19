@@ -1,8 +1,9 @@
 /* eslint-env mocha */
 import { garbage } from '@ipld/garbage'
 import { assert } from 'aegir/chai'
-import { encode, decode } from '../src/index.js'
+import { encode, decode, stringify, parse } from '../src/index.js'
 import { bytes, CID } from 'multiformats'
+import { base64 } from 'multiformats/bases/base64'
 
 const same = assert.deepStrictEqual
 const test = it
@@ -164,5 +165,22 @@ describe('basic dag-json', () => {
       const decoded = decode(encoded)
       same(decoded, original)
     }
+  })
+
+  test('serialize', () => {
+    same(stringify({ hello: 'world' }), JSON.stringify({ hello: 'world' }))
+
+    const input = { link, bytes: bytes.fromString('asdf'), n: null, o: {} }
+    same(stringify(input), JSON.stringify({
+      bytes: { '/': { bytes: base64.baseEncode(input.bytes) } },
+      link: { '/': link.toString() },
+      n: null,
+      o: {}
+    }))
+
+    const output = parse(stringify(input))
+    same(input, output)
+    same(bytes.isBinary(output.bytes), true)
+    same(CID.asCID(output.link), output.link)
   })
 })
