@@ -1,3 +1,14 @@
+## [10.0.0](https://github.com/ipld/js-dag-json/compare/v9.1.1...v10.0.0) (2023-01-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* reject duplicate map keys
+
+### Bug Fixes
+
+* reject duplicate map keys ([65a37bc](https://github.com/ipld/js-dag-json/commit/65a37bc17fd8cea11b36d6e30dcd6d16df462884))
+
 ## [9.1.1](https://github.com/ipld/js-dag-json/compare/v9.1.0...v9.1.1) (2023-01-03)
 
 
