@@ -192,6 +192,7 @@ const decodeOptions = {
   // safe-integer range, which may surprise users
   strict: true,
   useMaps: false,
+  rejectDuplicateMapKeys: true,
   /** @type {import('cborg').TagDecoder[]} */
   tags: []
 }
