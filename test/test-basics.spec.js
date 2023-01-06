@@ -183,4 +183,8 @@ describe('basic dag-json', () => {
     same(bytes.isBinary(output.bytes), true)
     same(CID.asCID(output.link), output.link)
   })
+
+  test('reject duplicate map keys', () => {
+    assert.throws(() => decode(new TextEncoder().encode('{"foo":1,"foo":2,"bar":3}')), /found repeat map key "foo"/)
+  })
 })
