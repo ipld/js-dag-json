@@ -1,3 +1,10 @@
+## [10.0.1](https://github.com/ipld/js-dag-json/compare/v10.0.0...v10.0.1) (2023-02-08)
+
+
+### Dependencies
+
+* **dev:** bump aegir from 37.12.1 to 38.1.2 ([7385c6e](https://github.com/ipld/js-dag-json/commit/7385c6e747a13baae885501f3773cd041e914027))
+
 ## [10.0.0](https://github.com/ipld/js-dag-json/compare/v9.1.1...v10.0.0) (2023-01-06)
 
 
