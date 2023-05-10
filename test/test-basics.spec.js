@@ -187,4 +187,8 @@ describe('basic dag-json', () => {
   test('reject duplicate map keys', () => {
     assert.throws(() => decode(new TextEncoder().encode('{"foo":1,"foo":2,"bar":3}')), /found repeat map key "foo"/)
   })
+
+  test('reject base64pad bytes', () => {
+    assert.throws(() => encode({ '/': { bytes: 'eA==' } }), /bytes value must be base64 encoded without padding/)
+  })
 })

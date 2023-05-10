@@ -17,15 +17,18 @@ import * as cborgJson from 'cborg/json'
  */
 
 /**
- * cidEncoder will receive all Objects during encode, it needs to filter out
- * anything that's not a CID and return `null` for that so it's encoded as
- * normal. Encoding a CID means replacing it with a `{"/":"<CidString>}`
+ * objectEncoder encodes CIDs and validates bytes. It will receive all Objects
+ * during encode. return `null` to filter out objects that should be encoded
+ * as normal. Encoding a CID means replacing it with a `{"/":"<CidString>}`
  * object as per the DAG-JSON spec.
  *
  * @param {any} obj
  * @returns {Token[]|null}
  */
-function cidEncoder (obj) {
+function objectEncoder (obj) {
+  if (obj['/'] && obj['/'].bytes && obj['/'].bytes[obj['/'].bytes.length - 1] === '=') {
+    throw new Error('bytes value must be base64 encoded without padding')
+  }
   if (obj.asCID !== obj && obj['/'] !== obj.bytes) {
     return null // any other kind of object
   }
@@ -97,7 +100,7 @@ function numberEncoder (num) {
 
 const encodeOptions = {
   typeEncoders: {
-    Object: cidEncoder,
+    Object: objectEncoder,
     Uint8Array: bytesEncoder, // TODO: all the typedarrays
     Buffer: bytesEncoder, // TODO: all the typedarrays
     undefined: undefinedEncoder,
