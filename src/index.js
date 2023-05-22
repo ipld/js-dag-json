@@ -1,8 +1,8 @@
 /* eslint max-depth: ["error", 7] */
-import { CID } from 'multiformats'
-import { base64 } from 'multiformats/bases/base64'
 import { Token, Type } from 'cborg'
 import * as cborgJson from 'cborg/json'
+import { CID } from 'multiformats'
+import { base64 } from 'multiformats/bases/base64'
 
 /**
  * @template T
@@ -66,6 +66,27 @@ function bytesEncoder (bytes) {
   ]
 }
 
+/**
+ * taBytesEncoder wraps bytesEncoder() but for the more exotic typed arrays so
+ * that we access the underlying ArrayBuffer data
+ *
+ * @param {Int8Array|Uint16Array|Int16Array|Uint32Array|Int32Array|Float32Array|Float64Array|Uint8ClampedArray|BigInt64Array|BigUint64Array} obj
+ * @returns {Token[]|null}
+ */
+function taBytesEncoder (obj) {
+  return bytesEncoder(new Uint8Array(obj.buffer, obj.byteOffset, obj.byteLength))
+}
+
+/**
+ * abBytesEncoder wraps bytesEncoder() but for plain ArrayBuffers
+ *
+ * @param {ArrayBuffer} ab
+ * @returns {Token[]|null}
+ */
+function abBytesEncoder (ab) {
+  return bytesEncoder(new Uint8Array(ab))
+}
+
 // eslint-disable-next-line jsdoc/require-returns-check
 /**
  * Intercept all `undefined` values from an object walk and reject the entire
@@ -98,8 +119,20 @@ function numberEncoder (num) {
 const encodeOptions = {
   typeEncoders: {
     Object: cidEncoder,
-    Uint8Array: bytesEncoder, // TODO: all the typedarrays
-    Buffer: bytesEncoder, // TODO: all the typedarrays
+    Buffer: bytesEncoder,
+    Uint8Array: bytesEncoder,
+    Int8Array: taBytesEncoder,
+    Uint16Array: taBytesEncoder,
+    Int16Array: taBytesEncoder,
+    Uint32Array: taBytesEncoder,
+    Int32Array: taBytesEncoder,
+    Float32Array: taBytesEncoder,
+    Float64Array: taBytesEncoder,
+    Uint8ClampedArray: taBytesEncoder,
+    BigInt64Array: taBytesEncoder,
+    BigUint64Array: taBytesEncoder,
+    DataView: taBytesEncoder,
+    ArrayBuffer: abBytesEncoder,
     undefined: undefinedEncoder,
     number: numberEncoder
   }
