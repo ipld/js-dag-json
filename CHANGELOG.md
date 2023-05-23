@@ -1,3 +1,15 @@
+## [10.1.0](https://github.com/ipld/js-dag-json/compare/v10.0.1...v10.1.0) (2023-05-23)
+
+
+### Features
+
+* TypedArray type conversions (and address other new lint complaints) ([94bd7ef](https://github.com/ipld/js-dag-json/commit/94bd7ef76b3effefbd12f4d2be2fe37a100ffa1e))
+
+
+### Dependencies
+
+* **dev:** bump aegir from 38.1.8 to 39.0.7 ([71b54c6](https://github.com/ipld/js-dag-json/commit/71b54c6ca38ad6dbc90eb5f11f1340ea97031750))
+
 ## [10.0.1](https://github.com/ipld/js-dag-json/compare/v10.0.0...v10.0.1) (2023-02-08)
 
 
