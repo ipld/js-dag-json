@@ -1,3 +1,10 @@
+## [10.1.1](https://github.com/ipld/js-dag-json/compare/v10.1.0...v10.1.1) (2023-06-14)
+
+
+### Dependencies
+
+* bump cborg from 1.10.2 to 2.0.1 ([91c3e3f](https://github.com/ipld/js-dag-json/commit/91c3e3fe1ad813b3a804e846a25be7a4d5fed7eb))
+
 ## [10.1.0](https://github.com/ipld/js-dag-json/compare/v10.0.1...v10.1.0) (2023-05-23)
 
 

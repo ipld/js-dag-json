@@ -1,6 +1,6 @@
 {
   "name": "@ipld/dag-json",
-  "version": "10.1.0",
+  "version": "10.1.1",
   "description": "JS implementation of DAG-JSON",
   "author": "Rod <rod@vagg.org> (http://r.va.gg/)",
   "license": "Apache-2.0 OR MIT",
