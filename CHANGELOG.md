@@ -1,3 +1,10 @@
+## [10.1.6](https://github.com/ipld/js-dag-json/compare/v10.1.5...v10.1.6) (2023-12-30)
+
+
+### Dependencies
+
+* bump multiformats from 12.1.3 to 13.0.0 ([#124](https://github.com/ipld/js-dag-json/issues/124)) ([aa07066](https://github.com/ipld/js-dag-json/commit/aa07066ed36bf9a8d1956b07f1880860b3709af2))
+
 ## [10.1.5](https://github.com/ipld/js-dag-json/compare/v10.1.4...v10.1.5) (2023-10-03)
 
 
