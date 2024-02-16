@@ -1,3 +1,10 @@
+## [10.2.0](https://github.com/ipld/js-dag-json/compare/v10.1.7...v10.2.0) (2024-02-16)
+
+
+### Features
+
+* support decoding ArrayBuffers ([#127](https://github.com/ipld/js-dag-json/issues/127)) ([1e6cc99](https://github.com/ipld/js-dag-json/commit/1e6cc99fa3a7d6c7c7a43597a28ff66be35e2eb0))
+
 ## [10.1.7](https://github.com/ipld/js-dag-json/compare/v10.1.6...v10.1.7) (2024-01-10)
 
 
