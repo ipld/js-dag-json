@@ -30,6 +30,15 @@ describe('basic dag-json', () => {
     same(bytes.toString(recode(byts)), expected)
   })
 
+  it('encode decode with ArrayBuffer', () => {
+    const byts = encode({ hello: 'world' })
+    same(JSON.parse(bytes.toString(recode(byts))), { hello: 'world' })
+    const o = { link, byts: bytes.fromString('asdf'), n: null, o: {} }
+    const byts2 = encode(o)
+    same(decode(byts2), o)
+    same(bytes.isBinary(decode(byts2).byts.buffer), true)
+  })
+
   describe('reserved space', () => {
     it('allow alternative types', () => {
       //  wrong types
