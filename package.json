@@ -166,6 +166,8 @@
   },
   "devDependencies": {
     "@ipld/garbage": "^6.0.0",
-    "aegir": "^45.0.1"
+    "aegir": "^45.0.7",
+    "eslint-config-ipfs": "^7.0.6",
+    "eslint-plugin-n": "^17.14.0"
   }
 }
