@@ -1,3 +1,9 @@
+## [10.2.4](https://github.com/ipld/js-dag-json/compare/v10.2.3...v10.2.4) (2025-05-08)
+
+### Dependencies
+
+* **dev:** bump aegir from 45.2.1 to 46.0.0 ([8a67347](https://github.com/ipld/js-dag-json/commit/8a67347f7d79c365c375f31a0ddc691d46784489))
+
 ## [10.2.3](https://github.com/ipld/js-dag-json/compare/v10.2.2...v10.2.3) (2024-10-29)
 
 ### Dependencies
