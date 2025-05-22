@@ -1,3 +1,18 @@
+## [10.2.5](https://github.com/ipld/js-dag-json/compare/v10.2.4...v10.2.5) (2025-05-22)
+
+### Bug Fixes
+
+* address lint errors ([b288139](https://github.com/ipld/js-dag-json/commit/b288139ba8393d6e72e85017186f0f89deeb66ad))
+
+### Trivial Changes
+
+* ignore package-lock ([1f84813](https://github.com/ipld/js-dag-json/commit/1f84813e8f2e379f297b2e44b604dbc258d4a1b3))
+* remove package-lock.json ([f904f26](https://github.com/ipld/js-dag-json/commit/f904f26718cbfbfee2d8d8454a845e3dddfa6760))
+
+### Dependencies
+
+* **dev:** bump aegir from 46.0.5 to 47.0.10 ([655d471](https://github.com/ipld/js-dag-json/commit/655d47104728f98b72c911dd518d7d6cc2c01705))
+
 ## [10.2.4](https://github.com/ipld/js-dag-json/compare/v10.2.3...v10.2.4) (2025-05-08)
 
 ### Dependencies
