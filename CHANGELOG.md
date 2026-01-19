@@ -1,3 +1,9 @@
+## [10.2.6](https://github.com/ipld/js-dag-json/compare/v10.2.5...v10.2.6) (2026-01-19)
+
+### Bug Fixes
+
+* use Type.equals() for bundler-safe type comparisons ([#141](https://github.com/ipld/js-dag-json/issues/141)) ([e66a8ea](https://github.com/ipld/js-dag-json/commit/e66a8eae56a799d94366ed3df1738d7892f86552))
+
 ## [10.2.5](https://github.com/ipld/js-dag-json/compare/v10.2.4...v10.2.5) (2025-05-22)
 
 ### Bug Fixes
