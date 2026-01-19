@@ -195,26 +195,26 @@ class DagJsonTokenizer extends cborgJson.Tokenizer {
   next () {
     const token = this._next()
 
-    if (token.type === Type.map) {
+    if (Type.equals(token.type, Type.map)) {
       const keyToken = this._next()
-      if (keyToken.type === Type.string && keyToken.value === '/') {
+      if (Type.equals(keyToken.type, Type.string) && keyToken.value === '/') {
         const valueToken = this._next()
-        if (valueToken.type === Type.string) { // *must* be a CID
+        if (Type.equals(valueToken.type, Type.string)) { // *must* be a CID
           const breakToken = this._next() // swallow the end-of-map token
-          if (breakToken.type !== Type.break) {
+          if (!Type.equals(breakToken.type, Type.break)) {
             throw new Error('Invalid encoded CID form')
           }
           this.tokenBuffer.push(valueToken) // CID.parse will pick this up after our tag token
           return new Token(Type.tag, 42, 0)
         }
-        if (valueToken.type === Type.map) {
+        if (Type.equals(valueToken.type, Type.map)) {
           const innerKeyToken = this._next()
-          if (innerKeyToken.type === Type.string && innerKeyToken.value === 'bytes') {
+          if (Type.equals(innerKeyToken.type, Type.string) && innerKeyToken.value === 'bytes') {
             const innerValueToken = this._next()
-            if (innerValueToken.type === Type.string) { // *must* be Bytes
+            if (Type.equals(innerValueToken.type, Type.string)) { // *must* be Bytes
               for (let i = 0; i < 2; i++) {
                 const breakToken = this._next() // swallow two end-of-map tokens
-                if (breakToken.type !== Type.break) {
+                if (!Type.equals(breakToken.type, Type.break)) {
                   throw new Error('Invalid encoded Bytes form')
                 }
               }
