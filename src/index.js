@@ -243,13 +243,12 @@ const decodeOptions = {
   strict: true,
   useMaps: false,
   rejectDuplicateMapKeys: true,
-  /** @type {import('cborg').TagDecoder[]} */
-  tags: []
+  /** @type {{ [tagNumber: number]: import('cborg').TagDecoder }} */
+  tags: {
+    // TAG(42)STRING("bafy...") from the tokenizer, decode to get the string
+    42: (decode) => CID.parse(/** @type {string} */ (decode()))
+  }
 }
-
-// we're going to get TAG(42)STRING("bafy...") from the tokenizer so we only need
-// to deal with the STRING("bafy...") at this point
-decodeOptions.tags[42] = CID.parse
 
 export const name = 'dag-json'
 export const code = 0x0129
