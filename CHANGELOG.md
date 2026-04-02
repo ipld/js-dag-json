@@ -1,3 +1,13 @@
+## [10.2.7](https://github.com/ipld/js-dag-json/compare/v10.2.6...v10.2.7) (2026-04-02)
+
+### Bug Fixes
+
+* adapt to cborg@5 changes ([809bd83](https://github.com/ipld/js-dag-json/commit/809bd839cd48023f12830501c408e39bcc73803a))
+
+### Dependencies
+
+* bump cborg from 4.5.8 to 5.0.0 ([f4979e6](https://github.com/ipld/js-dag-json/commit/f4979e69083448856dcf646a1fa72d6c0021efb0))
+
 ## [10.2.6](https://github.com/ipld/js-dag-json/compare/v10.2.5...v10.2.6) (2026-01-19)
 
 ### Bug Fixes
