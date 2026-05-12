@@ -1,3 +1,9 @@
+## [10.2.9](https://github.com/ipld/js-dag-json/compare/v10.2.8...v10.2.9) (2026-05-12)
+
+### Bug Fixes
+
+* support require ([#145](https://github.com/ipld/js-dag-json/issues/145)) ([242d750](https://github.com/ipld/js-dag-json/commit/242d7506b17050f6d7ca578a2bd86511f96952bd))
+
 ## [10.2.8](https://github.com/ipld/js-dag-json/compare/v10.2.7...v10.2.8) (2026-05-12)
 
 ### Dependencies
