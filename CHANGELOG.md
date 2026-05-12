@@ -1,3 +1,13 @@
+## [11.0.0](https://github.com/ipld/js-dag-json/compare/v10.2.9...v11.0.0) (2026-05-12)
+
+### ⚠ BREAKING CHANGES
+
+* CIDs returned from this module are from  multiformats@14.x.x
+
+### Bug Fixes
+
+* update multiformats to 14.x.x ([#147](https://github.com/ipld/js-dag-json/issues/147)) ([27522f2](https://github.com/ipld/js-dag-json/commit/27522f2e8f5bbb6e4dfc0337bc85cd722767d95e))
+
 ## [10.2.9](https://github.com/ipld/js-dag-json/compare/v10.2.8...v10.2.9) (2026-05-12)
 
 ### Bug Fixes
