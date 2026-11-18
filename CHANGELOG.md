@@ -1,3 +1,15 @@
+## [12.0.0](https://github.com/ipld/js-dag-json/compare/v11.0.1...v12.0.0) (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* inherited from cborg, see v7 release notes, can result in different bytes/CIDs for same data due to subtle changes and can reject previously accepted invalid dag-json inputs:
+* json: validate numeric fractions and exponents
+* json: cborg/json sorts map keys by UTF-8 bytes, not UTF-16 code units.
+
+### Dependencies
+
+* bump cborg from 6.2.1 to 7.0.0 ([#150](https://github.com/ipld/js-dag-json/issues/150)) ([89e075c](https://github.com/ipld/js-dag-json/commit/89e075c9cd039e65dc8316762a919e65b69d281c))
+
 ## [11.0.1](https://github.com/ipld/js-dag-json/compare/v11.0.0...v11.0.1) (2026-07-30)
 
 ### Dependencies
